@@ -7,7 +7,7 @@ export default function SearchBar() {
         <div className='hidden sm:block w-px sm:bg-gray-200 mx-9'></div>
     );
     return (
-        <div className='flex flex-col sm:flex-row bg-white p-6 sm:px-4 sm:py-3 shadow-[0_2px_0_1px_rgba(5,9,12,0.06)] sm:rounded-full sm:justify-between'>
+        <div className='flex flex-col relative sm:flex-row bg-white p-6 sm:px-4 sm:py-3 shadow-[0_2px_0_1px_rgba(5,9,12,0.06)] sm:rounded-full sm:justify-between'>
             <DatePicker />
             {divider}
             <NumResults />

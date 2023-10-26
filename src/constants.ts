@@ -22,6 +22,8 @@ export const DEFAULTS = {
     day: number;
 };
 
+export const PAGE_SIZES = [25, 50, 75, 100, 200];
+
 export const MONTHS = {
     1: 'January',
     2: 'February',
