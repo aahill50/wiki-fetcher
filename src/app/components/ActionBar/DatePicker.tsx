@@ -5,10 +5,17 @@ import clsx from 'clsx';
 import Icon from '../Icon';
 import iconCalendar from '~/assets/icon_calendar.svg';
 import iconChevronUp from '~/assets/icon_chevron_up.svg';
+import { useStore } from '~/store';
+
+// Quality data only goes back as far as May 1st, 2015
+// Use "Yesterday" as max
 
 export default function DatePicker() {
+    const calendarDay = useStore((state) => state.calendarDay);
+    const calendarMonth = useStore((state) => state.calendarMonth);
+    const calendarYear = useStore((state) => state.calendarYear);
     const [isOpen, setIsOpen] = useState(false);
-    const date = new Date(Date.UTC(2020, 5, 10));
+    const date = new Date(Date.UTC(calendarYear, calendarMonth - 1, calendarDay + 1));
     const dateString = Intl.DateTimeFormat('en-US', {
         dateStyle: 'long',
     }).format(date);

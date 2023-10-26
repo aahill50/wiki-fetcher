@@ -13,8 +13,8 @@ interface StoreState {
 
 export const useStore = create<StoreState>((setState) => ({
     articles: [],
-    calendarDay: 1,
     calendarMonth: 1,
-    calendarYear: 2021,
+    calendarDay: 12,
+    calendarYear: 2023,
     setArticles: (articles) => setState({ articles }),
 }));
