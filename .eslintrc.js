@@ -7,6 +7,7 @@ module.exports = {
         'next/core-web-vitals',
         'plugin:jest/recommended',
         'plugin:jest/style',
+        'plugin:testing-library/react',
     ],
     overrides: [
         {
@@ -25,6 +26,6 @@ module.exports = {
         project: './tsconfig.json',
         sourceType: 'module',
     },
-    plugins: ['jest'],
+    plugins: ['jest', 'testing-library'],
     rules: {},
 };
