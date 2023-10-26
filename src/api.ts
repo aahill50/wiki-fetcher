@@ -1,5 +1,5 @@
 import { ENDPOINT_ROOT, ENDPOINT_SEGMENT } from './constants';
-import { Access, EndpointSegment, Project } from './types';
+import { Access, Project } from './types';
 
 interface ApiCallOpts {
     endpointSegment: keyof typeof ENDPOINT_SEGMENT;
@@ -11,7 +11,9 @@ interface ApiCallOpts {
     day: number;
 }
 
-const padLeft = (str: string): string => `00${str}`.slice(-2);
+// Used to ensure day and month numbers get padded with a leading 0 when converted to String
+const padLeft = (str: string): string =>
+    str.length > 1 ? str : `0${str}`.slice(-2);
 
 const pageviewsByDayPerCountry = (opts: ApiCallOpts) =>
     [
@@ -53,6 +55,6 @@ export const apiCall = async (opts: ApiCallOpts) => {
     const endpoint = getEndpoint(opts);
 
     const res = await fetch(endpoint);
-    
+
     return await res.json();
 };
