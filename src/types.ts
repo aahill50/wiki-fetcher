@@ -1,4 +1,4 @@
-import { COUNTRY_CODES, ENDPOINT_SEGMENT, MONTHS } from './constants';
+import { COUNTRY_CODES, MONTHS } from './constants';
 
 export type Access = 'all-access' | 'desktop' | 'mobile-app' | 'mobile-web';
 
@@ -18,5 +18,3 @@ export interface PageviewsResult {
     project: Project;
     year: string;
 }
-
-export type EndpointSegment = keyof typeof ENDPOINT_SEGMENT
