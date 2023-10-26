@@ -13,3 +13,16 @@ export const formatArticles = (articles: Article[]): Article[] => {
 
 export const prettyNumbers = (num: number) =>
     Intl.NumberFormat('en').format(num);
+
+export const getArticlesForPage = (
+    articles: Article[],
+    page: number,
+    pageSize: number
+): Article[] => {
+    if (articles.length <= pageSize) {
+        return articles;
+    }
+    const startEndex = (page - 1) * pageSize;
+    const endIndex = startEndex + pageSize;
+    return articles.slice(startEndex, endIndex);
+};

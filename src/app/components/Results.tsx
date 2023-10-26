@@ -1,14 +1,17 @@
 'use client';
 
 import { useStore } from '~/store';
-import { prettyNumbers } from '~/utilities';
+import { getArticlesForPage, prettyNumbers } from '~/utilities';
 
 export default function Results() {
     const articles = useStore((state) => state.articles);
+    const page = useStore(state => state.page)
+    const pageSize = useStore(state => state.pageSize)
+    const filteredArticles = getArticlesForPage(articles, page, pageSize);
 
     return (
         <div className='flex flex-col gap-4 p-6 mt-6 bg-white'>
-            {articles?.map((article) => (
+            {filteredArticles?.map((article) => (
                 <div className='flex p-4 gap-5 border border-gray-200 rounded-xl'>
                     <div className='font-lora text-base w-5 shrink-0 mr-3 text-neutral-400 font-normal'>
                         {article.rank}
