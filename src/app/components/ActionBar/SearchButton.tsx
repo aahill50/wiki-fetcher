@@ -27,7 +27,7 @@ export default function SearchButton() {
 
     return (
         <button
-            className='font-averta bg-brandGreen-500 text-base py-3 sm:py-5 sm:max-w-[160px] grow rounded-full text-white font-semibold sm:font-medium tracking-wide'
+            className='font-averta sm:font-poppins bg-brandGreen-500 text-base py-3 sm:py-5 sm:ml-5 grow rounded-full text-white font-semibold sm:font-medium tracking-wide'
             onClick={onClickSearch}
         >
             Search

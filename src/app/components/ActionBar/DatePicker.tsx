@@ -36,7 +36,7 @@ export default function DatePicker() {
     };
 
     return (
-        <div className='flex mb-6 sm:mb-0 sm:pr-9 sm:border-r-gray-200 border-r'>
+        <div className='flex mb-6 sm:mb-0 sm:pr-9 sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'>
             <Icon
                 alt='calendar-icon'
                 height={40}

@@ -25,7 +25,7 @@ export default function NumResults() {
         </div>
     );
     return (
-        <div className='flex mb-6 sm:mb-0'>
+        <div className='flex mb-6 sm:mb-0 sm:max-w-[180px] md:max-w-[260px] sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'>
             <Icon alt='results-icon' height={40} svg={iconList} width={40} />
             <div className='flex flex-col ml-6'>
                 <div
