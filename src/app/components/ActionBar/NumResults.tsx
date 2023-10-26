@@ -25,14 +25,15 @@ export default function NumResults() {
         </div>
     );
     return (
-        <div className='flex mb-6'>
+        <div className='flex mb-6 sm:mb-0'>
             <Icon alt='results-icon' height={40} svg={iconList} width={40} />
             <div className='flex flex-col ml-6'>
                 <div
                     className='flex items-center font-poppins font-medium text-neutral-400 text-sm tracking-wider cursor-pointer'
                     onClick={onClickNumResults}
                 >
-                    # RESULTS
+                    <span className='inline-block sm:hidden mr-1'>#</span>
+                    <span className='hidden sm:inline-block mr-1'>NUM</span> RESULTS
                     <div className='ml-1'>{chevron}</div>
                 </div>
                 <div className='font-poppins font-normal text-black text-base'>

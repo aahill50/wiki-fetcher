@@ -1,17 +1,15 @@
 'use client';
 
 import { useStore } from '~/store';
+import { prettyNumbers } from '~/utilities';
 
-const prettyNumbers = (num: number) => {
-    return Intl.NumberFormat('en').format(num);
-};
 export default function Results() {
     const articles = useStore((state) => state.articles);
 
     return (
         <div className='flex flex-col gap-4 p-6 mt-6 bg-white'>
             {articles?.map((article) => (
-                <div className='flex p-4 gap-5 border border-gray-200 rounded-xl min-w-[328px]'>
+                <div className='flex p-4 gap-5 border border-gray-200 rounded-xl'>
                     <div className='font-lora text-base w-5 shrink-0 mr-3 text-neutral-400 font-normal'>
                         {article.rank}
                     </div>
