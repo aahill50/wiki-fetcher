@@ -5,7 +5,7 @@ export const ENDPOINT_ROOT =
 
 export const ENDPOINT_SEGMENT = {
     pageviewsByDay: 'top',
-    pageviewsByDayPerCountry: 'top-by-country',
+    pageviewsByDayPerCountry: 'top-per-country',
 } as const;
 
 export const DEFAULTS = {

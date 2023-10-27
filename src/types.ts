@@ -10,6 +10,8 @@ export interface Article {
 
 export type Project = 'en.wikipedia';
 
+export type Country = 'US';
+
 export interface PageviewsResult {
     articles: Article[];
     country: keyof typeof COUNTRY_CODES;
