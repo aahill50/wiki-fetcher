@@ -61,13 +61,13 @@ describe('getArticlesForPage', () => {
         },
     ])(
         'should return $pageSize articles (indices $i through $j) for page $page',
-        ({ i, j, page, pageSize, firstArticle, lastArticle }) => {
+        ({ page, pageSize, firstArticle, lastArticle }) => {
             const pageArticles = getArticlesForPage({
                 articles: mockArticles,
                 page,
                 pageSize,
             });
-            expect(pageArticles.length).toEqual(pageSize);
+            expect(pageArticles).toHaveLength(pageSize);
             expect(pageArticles[0].article).toEqual(firstArticle);
             expect(pageArticles[pageArticles.length - 1].article).toEqual(
                 lastArticle
@@ -84,11 +84,9 @@ describe('getArticlesForPage', () => {
             pageSize: 15,
         });
 
-        expect(pageArticles.length).toEqual(5);
-        expect(pageArticles[0].article).toEqual('Test-16');
-        expect(pageArticles[pageArticles.length - 1].article).toEqual(
-            'Test-20'
-        );
+        expect(pageArticles).toHaveLength(5);
+        expect(pageArticles[0].article).toBe('Test-16');
+        expect(pageArticles[pageArticles.length - 1].article).toBe('Test-20');
     });
 
     it(`should return no articles if there aren't enough articles to satisfy the page and pageSize condiditons`, () => {
@@ -100,7 +98,7 @@ describe('getArticlesForPage', () => {
             pageSize: 15,
         });
 
-        expect(pageArticles.length).toEqual(0);
-        expect(pageArticles.length).toEqual(0);
+        expect(pageArticles).toHaveLength(0);
+        expect(pageArticles).toHaveLength(0);
     });
 });

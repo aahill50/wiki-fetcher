@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import clsx from 'clsx';
 import Icon from '../Icon';
 import iconList from '~/assets/icon_list.svg';
@@ -17,10 +17,13 @@ export default function NumResults() {
         setIsOpen(!isOpen);
     }, [isOpen]);
 
-    const onClickPageSize = useCallback((pageSize: number) => {
-        setPageSize(pageSize);
-        setIsOpen(false);
-    }, []);
+    const onClickPageSize = useCallback(
+        (pageSize: number) => {
+            setPageSize(pageSize);
+            setIsOpen(false);
+        },
+        [setPageSize]
+    );
 
     const chevron = (
         <div className={clsx('transition-all', { 'rotate-180': !isOpen })}>
@@ -38,6 +41,7 @@ export default function NumResults() {
             {PAGE_SIZES.map((val) => {
                 return (
                     <div
+                        key={`page-size-${val}`}
                         className='flex mb-6 last:mb-0 justify-center'
                         onClick={() => onClickPageSize(val)}
                     >

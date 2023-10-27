@@ -13,7 +13,9 @@ export default function RootLayout({
     const cssImports = [
         `@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');`,
         `@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap');`,
-    ].map((importStatement) => <style>{importStatement}</style>);
+    ].map((importStatement) => (
+        <style key={importStatement}>{importStatement}</style>
+    ));
     return (
         <html lang='en'>
             {cssImports}

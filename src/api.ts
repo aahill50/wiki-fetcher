@@ -1,5 +1,5 @@
 import { ENDPOINT_ROOT, ENDPOINT_SEGMENT } from './constants';
-import { Access, Project } from './types';
+import { Access, Article, Project } from './types';
 
 interface ApiCallOpts {
     endpointSegment: keyof typeof ENDPOINT_SEGMENT;
@@ -51,10 +51,23 @@ export const getEndpoint = (opts: ApiCallOpts): string => {
     }
 };
 
+interface ResponseJsonItem {
+    access: Access;
+    articles: Article[];
+    day: string;
+    month: string;
+    project: Project;
+    year: string;
+}
+
+interface ResponseJson {
+    items: ResponseJsonItem[];
+}
+
 export const apiCall = async (opts: ApiCallOpts) => {
     const endpoint = getEndpoint(opts);
 
     const res = await fetch(endpoint);
 
-    return await res.json();
+    return (await res.json()) as ResponseJson;
 };
