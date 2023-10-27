@@ -27,5 +27,7 @@ module.exports = {
         sourceType: 'module',
     },
     plugins: ['jest', 'testing-library'],
-    rules: {},
+    rules: {
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+    },
 };
