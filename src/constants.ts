@@ -22,7 +22,11 @@ export const DEFAULTS = {
     day: number;
 };
 
-export const PAGE_SIZES = [25, 50, 75, 100, 200];
+export const PAGE_SIZE = 10;
+
+export const NUM_RESULTS = [25, 50, 75, 100, 200];
+
+export const NUM_PAGES_TO_DISPLAY = 4;
 
 export const MONTHS = {
     1: 'January',

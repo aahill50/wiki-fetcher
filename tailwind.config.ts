@@ -9,8 +9,14 @@ const config: Config = {
     theme: {
         extend: {
             colors: {
+                avocado: {
+                    300: '#E0E9CB',
+                },
                 brandGreen: {
                     500: '#025B4B',
+                },
+                neutral: {
+                    400: '#D4D8D9',
                 },
             },
             fontFamily: {

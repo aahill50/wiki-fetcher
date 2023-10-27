@@ -6,23 +6,23 @@ import Icon from '../Icon';
 import iconList from '~/assets/icon_list.svg';
 import iconChevronUp from '~/assets/icon_chevron_up.svg';
 import { useStore } from '~/store';
-import { PAGE_SIZES } from '~/constants';
+import { NUM_RESULTS } from '~/constants';
 
 export default function NumResults() {
-    const pageSize = useStore((state) => state.pageSize);
-    const setPageSize = useStore((state) => state.setPageSize);
+    const numResults = useStore((state) => state.numResults);
+    const setNumResults = useStore((state) => state.setNumResults);
     const [isOpen, setIsOpen] = useState(false);
 
-    const onClickNumResults = useCallback(() => {
+    const onClickNumResultsMenu = useCallback(() => {
         setIsOpen(!isOpen);
     }, [isOpen]);
 
-    const onClickPageSize = useCallback(
-        (pageSize: number) => {
-            setPageSize(pageSize);
+    const onClickNumResultsOption = useCallback(
+        (numResults: number) => {
+            setNumResults(numResults);
             setIsOpen(false);
         },
-        [setPageSize]
+        [setNumResults]
     );
 
     const chevron = (
@@ -38,12 +38,12 @@ export default function NumResults() {
 
     const pageSizePicker = (
         <>
-            {PAGE_SIZES.map((val) => {
+            {NUM_RESULTS.map((val) => {
                 return (
                     <div
                         key={`page-size-${val}`}
                         className='flex mb-6 last:mb-0 justify-center'
-                        onClick={() => onClickPageSize(val)}
+                        onClick={() => onClickNumResultsOption(val)}
                     >
                         {val}
                     </div>
@@ -53,7 +53,10 @@ export default function NumResults() {
     );
 
     return (
-        <div className='flex mb-6 sm:mb-0 sm:max-w-[180px] md:max-w-[260px] sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'>
+        <div
+            className='flex mb-6 sm:mb-0 sm:max-w-[200px] md:max-w-[260px] sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'
+            onClick={onClickNumResultsMenu}
+        >
             <div className='relative'>
                 <Icon
                     alt='results-icon'
@@ -89,10 +92,7 @@ export default function NumResults() {
                 </div>
             </div>
             <div className='flex flex-col ml-6'>
-                <div
-                    className='flex items-center font-poppins font-medium text-neutral-400 text-sm tracking-wider cursor-pointer'
-                    onClick={onClickNumResults}
-                >
+                <div className='flex items-center font-poppins font-medium text-neutral-400 text-sm tracking-wider cursor-pointer'>
                     <span className='inline-block sm:hidden mr-1'>#</span>
                     <span className='hidden sm:inline-block mr-1'>
                         NUM
@@ -101,7 +101,7 @@ export default function NumResults() {
                     <div className='ml-1'>{chevron}</div>
                 </div>
                 <div className='font-poppins font-normal text-black text-base'>
-                    {pageSize}
+                    {numResults}
                 </div>
             </div>
         </div>

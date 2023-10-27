@@ -5,10 +5,12 @@ import { useStore } from '~/store';
 import { formatArticles } from '~/utilities';
 
 export default function SearchButton() {
-    const setArticles = useStore((state) => state.setArticles);
     const calendarDay = useStore((state) => state.calendarDay);
     const calendarMonth = useStore((state) => state.calendarMonth);
     const calendarYear = useStore((state) => state.calendarYear);
+    const numResults = useStore((state) => state.numResults);
+    const setArticles = useStore((state) => state.setArticles);
+    const setPage = useStore((state) => state.setPage);
 
     const onClickSearch = useCallback(async () => {
         const res = await apiCall({
@@ -20,8 +22,16 @@ export default function SearchButton() {
             year: calendarYear,
         });
         const articles = res.items[0].articles || [];
-        setArticles(formatArticles(articles));
-    }, [calendarDay, calendarMonth, calendarYear, setArticles]);
+        setArticles(formatArticles(articles, numResults));
+        setPage(1);
+    }, [
+        calendarDay,
+        calendarMonth,
+        calendarYear,
+        numResults,
+        setArticles,
+        setPage,
+    ]);
 
     return (
         <button

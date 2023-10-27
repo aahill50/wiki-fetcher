@@ -1,5 +1,20 @@
 import { Article } from './types';
-import { formatArticles, getArticlesForPage, prettyNumbers } from './utilities';
+import {
+    formatArticles,
+    getArticlesForPage,
+    getDisplayPageNumbers,
+    prettyNumbers,
+} from './utilities';
+
+const createMockArticles = (count: number): Article[] => {
+    return Array(count)
+        .fill(0)
+        .map((_, n) => ({
+            article: `Test-${n + 1}`,
+            rank: n + 1,
+            views: 1000 - n,
+        }));
+};
 
 describe('prettyNumbers', () => {
     it('should convert a number to a string', () => {
@@ -17,7 +32,7 @@ describe('formatArticles', () => {
             { article: 'Test_Article_1', rank: 1, views: 1000 },
             { article: 'Test_Article_2', rank: 2, views: 500 },
         ];
-        const formattedArticles = formatArticles(mockArticles);
+        const formattedArticles = formatArticles(mockArticles, 10);
 
         expect(formattedArticles[0].article).toBe('Test Article 1');
         expect(formattedArticles[1].article).toBe('Test Article 2');
@@ -27,25 +42,20 @@ describe('formatArticles', () => {
         const mockArticles: Article[] = [
             { article: 'Test', rank: 1, views: 1000 },
         ];
-        const formattedArticles = formatArticles(mockArticles);
+        const formattedArticles = formatArticles(mockArticles, 10);
 
         expect(formattedArticles[0].article).toBe('Test');
     });
 });
 
 describe('getArticlesForPage', () => {
-    const mockArticles: Article[] = Array(20)
-        .fill(0)
-        .map((_, n) => ({
-            article: `Test-${n + 1}`,
-            rank: n + 1,
-            views: 1000 - n,
-        }));
+    const mockArticles: Article[] = createMockArticles(20);
 
     test.each([
         {
             i: 0,
             j: 9,
+            articleCount: 100,
             page: 1,
             pageSize: 10,
             firstArticle: 'Test-1',
@@ -54,6 +64,7 @@ describe('getArticlesForPage', () => {
         {
             i: 10,
             j: 19,
+            articleCount: 100,
             page: 2,
             pageSize: 10,
             firstArticle: 'Test-11',
@@ -101,4 +112,104 @@ describe('getArticlesForPage', () => {
         expect(pageArticles).toHaveLength(0);
         expect(pageArticles).toHaveLength(0);
     });
+});
+
+describe('getDisplayPageNumbers', () => {
+    it.each([
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 1,
+            pageSize: 10,
+            expected: [1, 2, 3, 4],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 2,
+            pageSize: 10,
+            expected: [1, 2, 3, 4],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 3,
+            pageSize: 10,
+            expected: [1, 2, 3, 4],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 4,
+            pageSize: 10,
+            expected: [2, 3, 4, 5],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 5,
+            pageSize: 10,
+            expected: [3, 4, 5, 6],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 6,
+            pageSize: 10,
+            expected: [4, 5, 6, 7],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 7,
+            pageSize: 10,
+            expected: [5, 6, 7, 8],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 8,
+            pageSize: 10,
+            expected: [6, 7, 8, 9],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 9,
+            pageSize: 10,
+            expected: [7, 8, 9, 10],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 10,
+            pageSize: 10,
+            expected: [7, 8, 9, 10],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: 11,
+            pageSize: 10,
+            expected: [7, 8, 9, 10],
+        },
+        {
+            mockArticles: createMockArticles(100),
+            articleCount: 100,
+            currentPage: -1,
+            pageSize: 10,
+            expected: [1, 2, 3, 4],
+        },
+    ])(
+        'should return $expected when on page $currentPage of $articleCount articles',
+        ({ mockArticles, currentPage, pageSize, expected }) => {
+            expect(
+                getDisplayPageNumbers({
+                    articles: mockArticles,
+                    pageSize,
+                    currentPage,
+                })
+            ).toEqual(expected);
+        }
+    );
 });
