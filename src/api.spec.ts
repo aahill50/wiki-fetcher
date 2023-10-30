@@ -1,5 +1,4 @@
 import { ApiCallOpts, apiCall, getEndpoint } from './api';
-import { ENDPOINT_ROOT, ENDPOINT_SEGMENT } from './constants';
 
 global.fetch = jest.fn(
     () =>

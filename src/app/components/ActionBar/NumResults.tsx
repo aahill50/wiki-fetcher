@@ -54,9 +54,36 @@ export default function NumResults() {
 
     return (
         <div
-            className='flex mb-6 sm:mb-0 sm:max-w-[200px] md:max-w-[260px] sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'
+            className='flex relative mb-6 sm:mb-0 sm:max-w-[200px] md:max-w-[260px] sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'
             onClick={onClickNumResultsMenu}
         >
+            <div
+                className={clsx(
+                    'absolute',
+                    'flex',
+                    'flex-col',
+                    'sm:top-[88px]',
+                    'top-16',
+                    '-left-2',
+                    'w-[200px]',
+                    'bg-white',
+                    'rounded-3xl',
+                    'shadow-[0_4px_24px_0_rgba(0,0,0,0.12)]',
+                    'font-poppins',
+                    'font-normal',
+                    'text-base',
+                    'transition-all',
+                    'overflow-hidden',
+                    {
+                        'h-0': !isOpen,
+                        'h-fit': isOpen,
+                        'px-2': isOpen,
+                        'py-8': isOpen,
+                    }
+                )}
+            >
+                {pageSizePicker}
+            </div>
             <div className='relative'>
                 <Icon
                     alt='results-icon'
@@ -64,32 +91,6 @@ export default function NumResults() {
                     svg={iconList}
                     width={40}
                 />
-                <div
-                    className={clsx(
-                        'absolute',
-                        'flex',
-                        'flex-col',
-                        'top-16',
-                        '-left-2',
-                        'w-[200px]',
-                        'bg-white',
-                        'rounded-3xl',
-                        'shadow-[0_4px_24px_0_rgba(0,0,0,0.12)]',
-                        'font-poppins',
-                        'font-normal',
-                        'text-base',
-                        'transition-all',
-                        'overflow-hidden',
-                        {
-                            'h-0': !isOpen,
-                            'h-fit': isOpen,
-                            'px-2': isOpen,
-                            'py-8': isOpen,
-                        }
-                    )}
-                >
-                    {pageSizePicker}
-                </div>
             </div>
             <div className='flex flex-col ml-6'>
                 <div className='flex items-center font-poppins font-medium text-neutral-400 text-sm tracking-wider cursor-pointer'>

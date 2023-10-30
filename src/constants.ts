@@ -28,6 +28,16 @@ export const NUM_RESULTS = [25, 50, 75, 100, 200];
 
 export const NUM_PAGES_TO_DISPLAY = 4;
 
+export const DAY_LABELS = [
+    'SUN',
+    'MON',
+    'TUE',
+    'WED',
+    'THU',
+    'FRI',
+    'SAT',
+] as const;
+
 export const MONTHS = {
     1: 'January',
     2: 'February',
@@ -41,7 +51,7 @@ export const MONTHS = {
     10: 'October',
     11: 'November',
     12: 'December',
-} as const;
+} as Record<number, string>;
 
 export const COUNTRY_CODES = {
     AD: 'Andorra',

@@ -2,26 +2,30 @@
 
 import { useState } from 'react';
 import clsx from 'clsx';
-import Icon from '../Icon';
+import Icon from '../../Icon';
 import iconCalendar from '~/assets/icon_calendar.svg';
 import iconChevronUp from '~/assets/icon_chevron_up.svg';
 import { useStore } from '~/store';
-
-// Quality data only goes back as far as May 1st, 2015
-// Use "Yesterday" as max
+import Calendar from './Calendar';
 
 export default function DatePicker() {
-    const calendarDay = useStore((state) => state.calendarDay);
-    const calendarMonth = useStore((state) => state.calendarMonth);
-    const calendarYear = useStore((state) => state.calendarYear);
-    const [isOpen, setIsOpen] = useState(false);
-    const date = new Date(Date.UTC(calendarYear, calendarMonth - 1, calendarDay + 1));
+    const selectedDay = useStore((state) => state.selectedDay);
+    const selectedMonth = useStore((state) => state.selectedMonth);
+    const selectedYear = useStore((state) => state.selectedYear);
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const date = new Date(
+        Date.UTC(selectedYear, selectedMonth - 1, selectedDay + 1)
+    );
     const dateString = Intl.DateTimeFormat('en-US', {
         dateStyle: 'long',
     }).format(date);
 
     const chevron = (
-        <div className={clsx('transition-all', { 'rotate-180': !isOpen })}>
+        <div
+            className={clsx('transition-all', {
+                'rotate-180': !isCalendarOpen,
+            })}
+        >
             <Icon
                 svg={iconChevronUp}
                 width={12}
@@ -31,23 +35,21 @@ export default function DatePicker() {
         </div>
     );
 
-    const onClickDate = () => {
-        setIsOpen(!isOpen);
+    const onClickDatePicker = () => {
+        setIsCalendarOpen(!isCalendarOpen);
     };
 
     return (
-        <div className='flex mb-6 sm:mb-0 sm:pr-9 sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'>
+        <div className='flex relative mb-6 sm:mb-0 sm:pr-9 sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'>
             <Icon
                 alt='calendar-icon'
                 height={40}
                 svg={iconCalendar}
                 width={40}
             />
-            <div className='flex flex-col ml-6'>
-                <div
-                    className='flex items-center font-poppins font-medium text-neutral-400 text-sm tracking-wider cursor-pointer'
-                    onClick={onClickDate}
-                >
+            <Calendar isOpen={isCalendarOpen} />
+            <div className='flex flex-col ml-6' onClick={onClickDatePicker}>
+                <div className='flex items-center font-poppins font-medium text-neutral-400 text-sm tracking-wider cursor-pointer'>
                     DATE
                     <div className='ml-1'>{chevron}</div>
                 </div>

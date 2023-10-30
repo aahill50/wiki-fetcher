@@ -1,18 +1,35 @@
 import { NUM_PAGES_TO_DISPLAY } from './constants';
 import { Article } from './types';
 
+const articlesToExclude: Record<string, boolean> = {
+    Main_Page: true,
+    '404.php': true,
+};
+
+// figure out hy 2022 is broken?
+// june 1, 2022 for example
+const articlesFilterFn = (article: Article): boolean => {
+    const articleName = article.article;
+    const isExcluded = !!articlesToExclude[articleName];
+    const isSpecialArticle = articleName.slice(0, 8) === 'Special:';
+    const isWikipediaArticle = articleName.slice(0, 10) === 'Wikipedia:';
+    return !(isExcluded || isSpecialArticle || isWikipediaArticle);
+};
 export const formatArticles = (
     articles: Article[],
     numResults: number
 ): Article[] => {
-    return articles.slice(0, numResults).map((el) => {
-        const { article, rank, views } = el;
-        return {
-            article: article.replaceAll('_', ' '),
-            rank,
-            views,
-        };
-    });
+    return articles
+        .filter(articlesFilterFn)
+        .slice(0, numResults)
+        .map((el, i) => {
+            const { article, views } = el;
+            return {
+                article: article.replaceAll('_', ' '),
+                rank: i + 1,
+                views,
+            };
+        });
 };
 
 export const prettyNumbers = (num: number) =>

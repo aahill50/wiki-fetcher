@@ -24,8 +24,6 @@ export default function PrevPage(props: Props) {
                     'w-10',
                     'h-10',
                     'rounded-full',
-                    'mr-2',
-                    'last:mr-0',
                     'text-sm',
                     'font-poppins',
                     'font-normal',

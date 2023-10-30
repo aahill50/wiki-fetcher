@@ -15,8 +15,13 @@ const config: Config = {
                 brandGreen: {
                     500: '#025B4B',
                 },
+                ivy: {
+                    300: '#B3CEC9',
+                },
                 neutral: {
                     400: '#D4D8D9',
+                    500: '#A7AAAB',
+                    900: '#05090D',
                 },
             },
             fontFamily: {
