@@ -13,16 +13,19 @@ export default function SearchButton() {
     const setPage = useStore((state) => state.setPage);
 
     const onClickSearch = useCallback(async () => {
+        const day = selectedDay;
+        const month = selectedMonth;
+        const year = selectedYear;
         const res = await apiCall({
             endpointSegment: 'pageviewsByDay',
             access: 'all-access',
-            day: selectedDay,
-            month: selectedMonth,
+            day,
+            month,
             project: 'en.wikipedia',
-            year: selectedYear,
+            year,
         });
         const articles = res.items[0].articles || [];
-        setArticles(formatArticles(articles, numResults));
+        setArticles(formatArticles(articles, numResults, { day, month, year }));
         setPage(1);
     }, [
         selectedDay,

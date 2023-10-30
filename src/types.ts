@@ -6,6 +6,7 @@ export interface Article {
     article: string;
     views: number;
     rank: number;
+    key: string;
 }
 
 export type Project = 'en.wikipedia';

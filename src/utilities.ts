@@ -15,9 +15,17 @@ const articlesFilterFn = (article: Article): boolean => {
     const isWikipediaArticle = articleName.slice(0, 10) === 'Wikipedia:';
     return !(isExcluded || isSpecialArticle || isWikipediaArticle);
 };
+
+interface BasicDate {
+    day: number;
+    month: number;
+    year: number;
+}
+
 export const formatArticles = (
     articles: Article[],
-    numResults: number
+    numResults: number,
+    date: BasicDate
 ): Article[] => {
     return articles
         .filter(articlesFilterFn)
@@ -28,6 +36,7 @@ export const formatArticles = (
                 article: article.replaceAll('_', ' '),
                 rank: i + 1,
                 views,
+                key: `${article}-${date.month}/${date.day}/${date.year}`,
             };
         });
 };

@@ -13,6 +13,7 @@ const createMockArticles = (count: number): Article[] => {
             article: `Test-${n + 1}`,
             rank: n + 1,
             views: 1000 - n,
+            key: 'article-key',
         }));
 };
 
@@ -29,10 +30,24 @@ describe('prettyNumbers', () => {
 describe('formatArticles', () => {
     it('should replace any "_" in article names with " "', () => {
         const mockArticles: Article[] = [
-            { article: 'Test_Article_1', rank: 1, views: 1000 },
-            { article: 'Test_Article_2', rank: 2, views: 500 },
+            {
+                article: 'Test_Article_1',
+                rank: 1,
+                views: 1000,
+                key: 'test-key-1',
+            },
+            {
+                article: 'Test_Article_2',
+                rank: 2,
+                views: 500,
+                key: 'test-key-2',
+            },
         ];
-        const formattedArticles = formatArticles(mockArticles, 10);
+        const formattedArticles = formatArticles(mockArticles, 10, {
+            day: 1,
+            month: 1,
+            year: 2023,
+        });
 
         expect(formattedArticles[0].article).toBe('Test Article 1');
         expect(formattedArticles[1].article).toBe('Test Article 2');
@@ -40,9 +55,13 @@ describe('formatArticles', () => {
 
     it('should work when there are no "_" to replace', () => {
         const mockArticles: Article[] = [
-            { article: 'Test', rank: 1, views: 1000 },
+            { article: 'Test', rank: 1, views: 1000, key: 'test-key' },
         ];
-        const formattedArticles = formatArticles(mockArticles, 10);
+        const formattedArticles = formatArticles(mockArticles, 10, {
+            day: 1,
+            month: 1,
+            year: 2023,
+        });
 
         expect(formattedArticles[0].article).toBe('Test');
     });
