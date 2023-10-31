@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { lora, poppins } from '~/fonts/fonts';
+import clsx from 'clsx';
 
 export const metadata: Metadata = {
     title: 'Wiki Fetcher',
@@ -10,16 +12,9 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const cssImports = [
-        `@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');`,
-        `@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap');`,
-    ].map((importStatement) => (
-        <style key={importStatement}>{importStatement}</style>
-    ));
     return (
         <html lang='en'>
-            {cssImports}
-            <body className='bg-neutral-100'>{children}</body>
+            <body className={clsx('bg-neutral-100', lora.variable, poppins.variable)}>{children}</body>
         </html>
     );
 }

@@ -27,8 +27,8 @@ const config: Config = {
             },
             fontFamily: {
                 averta: ['Averta Standard'],
-                lora: ['Lora, serif'],
-                poppins: ['Poppins, sans-serif'],
+                lora: ['var(--font-lora), serif'],
+                poppins: ['var(--font-poppins), sans-serif'],
             },
         },
     },

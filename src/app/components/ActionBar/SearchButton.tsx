@@ -1,6 +1,8 @@
 'use client';
+import clsx from 'clsx';
 import { useCallback } from 'react';
 import api from '~/api';
+import { averta } from '~/fonts/fonts';
 import { useStore } from '~/store';
 import { formatArticles } from '~/utilities';
 
@@ -42,7 +44,25 @@ export default function SearchButton() {
 
     return (
         <button
-            className='font-averta sm:font-poppins bg-brandGreen-500 text-base sm:max-md:text-sm py-3 sm:py-5 sm:ml-5 grow-0 min-w-[160px] sm:max-md:min-w-[100px] rounded-full text-white font-semibold sm:font-medium tracking-wide cursor-pointer'
+            className={clsx(
+                'sm:font-poppins',
+                'bg-brandGreen-500',
+                'text-base',
+                'sm:max-md:text-sm',
+                'py-3',
+                'sm:py-5',
+                'sm:ml-5',
+                'grow-0',
+                'min-w-[160px]',
+                'sm:max-md:min-w-[100px]',
+                'rounded-full',
+                'text-white',
+                'font-semibold',
+                'sm:font-medium',
+                'tracking-wide',
+                'cursor-pointer',
+                averta.className
+            )}
             onClick={() => void onClickSearch()}
         >
             Search
