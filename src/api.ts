@@ -1,43 +1,42 @@
-import { ENDPOINT_ROOT, ENDPOINT_SEGMENT } from './constants';
-import { Access, Article, Country, Project } from './types';
+import {
+    PAGEVIEWS_ENDPOINT_ROOT,
+    ENDPOINT_SEGMENT,
+    PAGE_ENDPOINT_ROOT,
+} from './constants';
+import { Access, Country, Project } from './types';
 
-interface RawResponseArticle {
-    article: string;
-    project?: string;
-    rank: number;
-    views?: number;
-    views_ceil?: number;
-}
-interface ResponseJsonItem {
-    access: Access;
-    articles: Omit<Article, 'key'>[];
-    day: string;
-    month: string;
+interface PageviewsByDayApiCallOpts {
     project: Project;
-    year: string;
-}
-
-interface ResponseJson {
-    items: ResponseJsonItem[];
-}
-
-export interface ApiCallOpts {
-    endpointSegment: keyof typeof ENDPOINT_SEGMENT;
-    project: Project;
-    country?: Country;
     access: Access;
     year: number;
     month: number;
     day: number;
 }
 
+interface PageviewsByDayPerCountryApiCallOpts {
+    country: Country;
+    access: Access;
+    year: number;
+    month: number;
+    day: number;
+}
+
+interface SummaryApiCallOpts {
+    article: string;
+}
+
+export type ApiCallOpts =
+    | PageviewsByDayApiCallOpts
+    | PageviewsByDayPerCountryApiCallOpts
+    | SummaryApiCallOpts;
+
 // Used to ensure day and month numbers get padded with a leading 0 when converted to String
 const padLeft = (str: string): string =>
     str.length > 1 ? str : `0${str}`.slice(-2);
 
-const pageviewsByDayPerCountry = (opts: ApiCallOpts) =>
+const pageviewsByDayPerCountry = (opts: PageviewsByDayPerCountryApiCallOpts) =>
     [
-        ENDPOINT_ROOT,
+        PAGEVIEWS_ENDPOINT_ROOT,
         ENDPOINT_SEGMENT.pageviewsByDayPerCountry,
         opts.country,
         opts.access,
@@ -46,9 +45,9 @@ const pageviewsByDayPerCountry = (opts: ApiCallOpts) =>
         padLeft(String(opts.day)),
     ].join('/');
 
-const pageviewsByDay = (opts: ApiCallOpts) =>
+const pageviewsByDay = (opts: PageviewsByDayApiCallOpts) =>
     [
-        ENDPOINT_ROOT,
+        PAGEVIEWS_ENDPOINT_ROOT,
         ENDPOINT_SEGMENT.pageviewsByDay,
         opts.project,
         opts.access,
@@ -57,43 +56,135 @@ const pageviewsByDay = (opts: ApiCallOpts) =>
         padLeft(String(opts.day)),
     ].join('/');
 
-export const getEndpoint = (opts: ApiCallOpts): string => {
-    switch (opts.endpointSegment) {
-        case 'pageviewsByDay': {
-            return pageviewsByDay(opts);
-        }
-        case 'pageviewsByDayPerCountry': {
-            return pageviewsByDayPerCountry(opts);
-        }
-        default: {
-            return pageviewsByDay(opts);
-        }
-    }
-};
+const articleSummary = (opts: SummaryApiCallOpts) =>
+    [PAGE_ENDPOINT_ROOT, ENDPOINT_SEGMENT.summary, opts.article].join('/');
 
-export const apiCall = async (opts: ApiCallOpts): Promise<ResponseJson> => {
-    const endpoint = getEndpoint(opts);
+interface PageviewsByDayResponseArticle {
+    article: string;
+    rank: number;
+    views: number;
+}
+interface PageviewsByDayResponseJson {
+    items: {
+        access: Access;
+        articles: PageviewsByDayResponseArticle[];
+        day: string;
+        month: string;
+        project: Project;
+        year: string;
+    }[];
+}
 
-    const res = await fetch(endpoint);
-    const json: ResponseJson = await res.json();
+interface PageviewsByDayPerCountryResponseArticle {
+    article: string;
+    project: Project;
+    rank: number;
+    views_ceil: number;
+}
+interface PageviewsByDayPerCountryResponseJson {
+    items: {
+        access: Access;
+        articles: PageviewsByDayPerCountryResponseArticle[];
+        country: Country;
+        day: string;
+        month: string;
+        year: string;
+    }[];
+}
 
-    const articles = json.items?.[0].articles.map(
-        ({ article, project, rank, views, views_ceil }: RawResponseArticle) =>
+interface PageviewsResponse {
+    items: {
+        articles: {
+            article: string;
+            originalTitle: string;
+            rank: number;
+            views: number;
+        }[];
+    }[];
+}
+interface SummaryResponseJson {
+    description: string;
+    extract: string;
+    thumbnail: {
+        source: string;
+        width: number;
+        height: number;
+    };
+}
+
+export type SummaryResponse = SummaryResponseJson & { originalTitle: string };
+
+const api = {
+    getPageViewsByDay: async (
+        opts: PageviewsByDayApiCallOpts
+    ): Promise<PageviewsResponse> => {
+        const endpoint = pageviewsByDay(opts);
+        const res = await fetch(endpoint);
+        const json: PageviewsByDayResponseJson = await res.json();
+
+        const articles = json.items?.[0].articles?.map(
+            ({ article, rank, views }: PageviewsByDayResponseArticle) =>
+                ({
+                    article,
+                    originalTitle: article,
+                    rank,
+                    views,
+                } || [])
+        );
+
+        return {
+            ...json,
+            items: [
+                {
+                    ...json?.items?.[0],
+                    articles,
+                },
+            ],
+        };
+    },
+    getPageviewsByDayPerCountry: async (
+        opts: PageviewsByDayPerCountryApiCallOpts
+    ): Promise<PageviewsResponse> => {
+        const endpoint = pageviewsByDayPerCountry(opts);
+        const res = await fetch(endpoint);
+        const json: PageviewsByDayPerCountryResponseJson = await res.json();
+
+        const articles = json.items?.[0].articles.map(
             ({
                 article,
-                project,
                 rank,
-                views: views ?? views_ceil ?? 0,
-            } || [])
-    );
+                views_ceil,
+            }: PageviewsByDayPerCountryResponseArticle) =>
+                ({
+                    article,
+                    originalTitle: article,
+                    rank,
+                    views: views_ceil,
+                } || [])
+        );
 
-    return {
-        ...json,
-        items: [
-            {
-                ...json?.items?.[0],
-                articles,
-            },
-        ],
-    };
+        return {
+            ...json,
+            items: [
+                {
+                    ...json?.items?.[0],
+                    articles,
+                },
+            ],
+        };
+    },
+    getSummary: async (opts: SummaryApiCallOpts): Promise<SummaryResponse> => {
+        const endpoint = articleSummary(opts);
+        const res = await fetch(endpoint);
+        const json: SummaryResponseJson = await res.json();
+
+        return {
+            description: json.description,
+            extract: json.extract,
+            originalTitle: opts.article,
+            thumbnail: json.thumbnail,
+        };
+    },
 };
+
+export default api;

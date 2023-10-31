@@ -6,14 +6,20 @@ const articlesToExclude: Record<string, boolean> = {
     '404.php': true,
 };
 
-// figure out hy 2022 is broken?
-// june 1, 2022 for example
 const articlesFilterFn = (article: Omit<Article, 'key'>): boolean => {
     const articleName = article.article;
     const isExcluded = !!articlesToExclude[articleName];
     const isSpecialArticle = articleName.slice(0, 8) === 'Special:';
     const isWikipediaArticle = articleName.slice(0, 10) === 'Wikipedia:';
-    return !(isExcluded || isSpecialArticle || isWikipediaArticle);
+    const isWikidataArticle = articleName.slice(0, 10) === 'Wikidata:';
+    const isCommonsArticle = articleName.slice(0, 10) === 'Commons:';
+    return !(
+        isExcluded ||
+        isSpecialArticle ||
+        isWikipediaArticle ||
+        isWikidataArticle ||
+        isCommonsArticle
+    );
 };
 
 interface BasicDate {
@@ -30,10 +36,11 @@ export const formatArticles = (
     return articles
         .filter(articlesFilterFn)
         .slice(0, numResults)
-        .map((el, i) => {
-            const { article, views } = el;
+        .map((_article, i) => {
+            const { article, originalTitle, views } = _article;
             return {
                 article: article.replaceAll('_', ' '),
+                originalTitle,
                 rank: i + 1,
                 views,
                 key: `${article}-${date.month}/${date.day}/${date.year}`,

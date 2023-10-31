@@ -21,6 +21,7 @@ const config: Config = {
                 neutral: {
                     400: '#D4D8D9',
                     500: '#A7AAAB',
+                    600: '#737680',
                     900: '#05090D',
                 },
             },

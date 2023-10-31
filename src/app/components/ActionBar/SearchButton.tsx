@@ -1,6 +1,6 @@
 'use client';
 import { useCallback } from 'react';
-import { apiCall } from '~/api';
+import api from '~/api';
 import { useStore } from '~/store';
 import { formatArticles } from '~/utilities';
 
@@ -18,13 +18,11 @@ export default function SearchButton() {
         const day = selectedDay;
         const month = selectedMonth;
         const year = selectedYear;
-        const res = await apiCall({
-            endpointSegment: 'pageviewsByDayPerCountry',
+        const res = await api.getPageviewsByDayPerCountry({
             access: 'all-access',
             country,
             day,
             month,
-            project: 'en.wikipedia',
             year,
         });
         const articles = res.items[0].articles || [];

@@ -11,6 +11,7 @@ const createMockArticles = (count: number): Article[] => {
         .fill(0)
         .map((_, n) => ({
             article: `Test-${n + 1}`,
+            originalTitle: `Test-${n + 1}`,
             rank: n + 1,
             views: 1000 - n,
             key: 'article-key',
@@ -32,12 +33,14 @@ describe('formatArticles', () => {
         const mockArticles: Article[] = [
             {
                 article: 'Test_Article_1',
+                originalTitle: 'Test_Article_1',
                 rank: 1,
                 views: 1000,
                 key: 'test-key-1',
             },
             {
                 article: 'Test_Article_2',
+                originalTitle: 'Test_Article_2',
                 rank: 2,
                 views: 500,
                 key: 'test-key-2',
@@ -55,7 +58,13 @@ describe('formatArticles', () => {
 
     it('should work when there are no "_" to replace', () => {
         const mockArticles: Article[] = [
-            { article: 'Test', rank: 1, views: 1000, key: 'test-key' },
+            {
+                article: 'Test',
+                originalTitle: 'Test',
+                rank: 1,
+                views: 1000,
+                key: 'test-key',
+            },
         ];
         const formattedArticles = formatArticles(mockArticles, 10, {
             day: 1,

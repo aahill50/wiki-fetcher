@@ -4,6 +4,7 @@ export type Access = 'all-access' | 'desktop' | 'mobile-app' | 'mobile-web';
 
 export interface Article {
     article: string;
+    originalTitle: string;
     views: number;
     rank: number;
     key: string;
