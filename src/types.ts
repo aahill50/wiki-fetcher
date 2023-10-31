@@ -1,4 +1,4 @@
-import { COUNTRY_CODES, MONTHS } from './constants';
+import { COUNTRY_CODE, COUNTRY_CODES, MONTHS } from './constants';
 
 export type Access = 'all-access' | 'desktop' | 'mobile-app' | 'mobile-web';
 
@@ -11,7 +11,7 @@ export interface Article {
 
 export type Project = 'en.wikipedia';
 
-export type Country = 'US';
+export type Country = COUNTRY_CODE;
 
 export interface PageviewsResult {
     articles: Article[];

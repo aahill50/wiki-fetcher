@@ -81,16 +81,23 @@ export default function Results() {
         </div>
     );
 
+    const hasPinnedArticles = Object.keys(pinnedArticles).length > 0;
+    const hasArticles = filteredArticles.length > 0;
+    
     return (
         <>
-            <div className='flex flex-col gap-4 p-6 mt-6 bg-white sm:rounded-2xl shadow-[0_2px_0_1px_rgba(5,9,12,0.06)]'>
-                {Object.keys(pinnedArticles).map((key) =>
-                    renderArticle(pinnedArticles[key], { showRank: false })
-                )}
-            </div>
-            <div className='flex flex-col gap-4 p-6 mt-6 bg-white sm:rounded-2xl shadow-[0_2px_0_1px_rgba(5,9,12,0.06)]'>
-                {filteredArticles?.map((article) => renderArticle(article))}
-            </div>
+            {!hasPinnedArticles ? null : (
+                <div className='flex flex-col gap-4 p-6 mt-6 bg-white sm:rounded-2xl shadow-[0_2px_0_1px_rgba(5,9,12,0.06)]'>
+                    {Object.keys(pinnedArticles).map((key) =>
+                        renderArticle(pinnedArticles[key], { showRank: false })
+                    )}
+                </div>
+            )}
+            {!hasArticles ? null : (
+                <div className='flex flex-col gap-4 p-6 mt-6 bg-white sm:rounded-2xl shadow-[0_2px_0_1px_rgba(5,9,12,0.06)]'>
+                    {filteredArticles?.map((article) => renderArticle(article))}
+                </div>
+            )}
         </>
     );
 }

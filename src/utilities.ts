@@ -8,7 +8,7 @@ const articlesToExclude: Record<string, boolean> = {
 
 // figure out hy 2022 is broken?
 // june 1, 2022 for example
-const articlesFilterFn = (article: Article): boolean => {
+const articlesFilterFn = (article: Omit<Article, 'key'>): boolean => {
     const articleName = article.article;
     const isExcluded = !!articlesToExclude[articleName];
     const isSpecialArticle = articleName.slice(0, 8) === 'Special:';
@@ -23,7 +23,7 @@ interface BasicDate {
 }
 
 export const formatArticles = (
-    articles: Article[],
+    articles: Omit<Article, 'key'>[],
     numResults: number,
     date: BasicDate
 ): Article[] => {

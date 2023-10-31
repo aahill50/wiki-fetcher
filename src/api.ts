@@ -1,9 +1,16 @@
 import { ENDPOINT_ROOT, ENDPOINT_SEGMENT } from './constants';
 import { Access, Article, Country, Project } from './types';
 
+interface RawResponseArticle {
+    article: string;
+    project?: string;
+    rank: number;
+    views?: number;
+    views_ceil?: number;
+}
 interface ResponseJsonItem {
     access: Access;
-    articles: Article[];
+    articles: Omit<Article, 'key'>[];
     day: string;
     month: string;
     project: Project;
@@ -64,10 +71,29 @@ export const getEndpoint = (opts: ApiCallOpts): string => {
     }
 };
 
-export const apiCall = async (opts: ApiCallOpts) => {
+export const apiCall = async (opts: ApiCallOpts): Promise<ResponseJson> => {
     const endpoint = getEndpoint(opts);
 
     const res = await fetch(endpoint);
+    const json: ResponseJson = await res.json();
 
-    return (await res.json()) as ResponseJson;
+    const articles = json.items?.[0].articles.map(
+        ({ article, project, rank, views, views_ceil }: RawResponseArticle) =>
+            ({
+                article,
+                project,
+                rank,
+                views: views ?? views_ceil ?? 0,
+            } || [])
+    );
+
+    return {
+        ...json,
+        items: [
+            {
+                ...json?.items?.[0],
+                articles,
+            },
+        ],
+    };
 };

@@ -28,6 +28,14 @@ export const NUM_RESULTS = [25, 50, 75, 100, 200];
 
 export const NUM_PAGES_TO_DISPLAY = 4;
 
+export const MENUS = {
+    DATE_PICKER: 'DATE_PICKER',
+    NUM_RESULTS: 'NUM_RESULTS',
+    COUNTRY: 'COUNTRY',
+} as const;
+
+export type MENU_KEY = keyof typeof MENUS;
+
 export const DAY_LABELS = [
     'SUN',
     'MON',
@@ -303,4 +311,6 @@ export const COUNTRY_CODES = {
     ZA: 'South Africa',
     ZM: 'Zambia',
     ZW: 'Zimbabwe',
-};
+} as const;
+
+export type COUNTRY_CODE = keyof typeof COUNTRY_CODES;

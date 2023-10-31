@@ -1,36 +1,58 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
+import { COUNTRY_CODE, COUNTRY_CODES, MENUS } from '~/constants';
 import Icon from '../Icon';
-import iconList from '~/assets/icon_list.svg';
-import iconChevronUp from '~/assets/icon_chevron_up.svg';
 import { useStore } from '~/store';
-import { MENUS, NUM_RESULTS } from '~/constants';
+import iconChevronUp from '~/assets/icon_chevron_up.svg';
+import iconGlobe from '~/assets/icon_globe.svg';
+import { useCallback, useEffect, useState } from 'react';
 import ActionBarMenu from './ActionBarMenu';
 
-export default function NumResults() {
-    const numResults = useStore((state) => state.numResults);
-    const setNumResults = useStore((state) => state.setNumResults);
+export default function CountryFilter() {
+    const country = useStore((state) => state.country);
+    const setCountry = useStore((state) => state.setCountry);
     const openMenu = useStore((state) => state.openMenu);
     const setOpenMenu = useStore((state) => state.setOpenMenu);
 
-    const [isOpen, setIsOpen] = useState(openMenu === MENUS.NUM_RESULTS);
+    const [displayCountry, setDisplayCountry] = useState(
+        COUNTRY_CODES[country]
+    );
+
+    const [isOpen, setIsOpen] = useState(openMenu === MENUS.COUNTRY);
 
     useEffect(() => {
-        setIsOpen(openMenu === MENUS.NUM_RESULTS);
+        setDisplayCountry(COUNTRY_CODES[country]);
+    }, [country]);
+
+    useEffect(() => {
+        setIsOpen(openMenu === MENUS.COUNTRY);
     }, [openMenu]);
 
-    const onClickNumResultsMenu = useCallback(() => {
-        setOpenMenu(isOpen ? null : MENUS.NUM_RESULTS);
+    const onClickCountryMenu = useCallback(() => {
+        setOpenMenu(isOpen ? null : MENUS.COUNTRY);
     }, [isOpen, setOpenMenu]);
 
-    const onClickNumResultsOption = useCallback(
-        (numResults: number) => {
-            setNumResults(numResults);
-            setIsOpen(false);
-        },
-        [setNumResults]
+    const onClickCountry = useCallback((code: COUNTRY_CODE) => {
+        setCountry(code);
+    }, [setCountry]);
+
+    const countryPicker = (
+        <>
+            {Object.keys(COUNTRY_CODES).map((key) => {
+                const code = key as COUNTRY_CODE;
+                const countryName = COUNTRY_CODES[code];
+                return (
+                    <div
+                        key={`page-size-${code}`}
+                        className='flex mb-6 last:mb-0'
+                        onClick={() => onClickCountry(code)}
+                    >
+                        {countryName}
+                    </div>
+                );
+            })}
+        </>
     );
 
     const chevron = (
@@ -44,36 +66,20 @@ export default function NumResults() {
         </div>
     );
 
-    const pageSizePicker = (
-        <>
-            {NUM_RESULTS.map((val) => {
-                return (
-                    <div
-                        key={`page-size-${val}`}
-                        className='flex mb-6 last:mb-0 justify-center'
-                        onClick={() => onClickNumResultsOption(val)}
-                    >
-                        {val}
-                    </div>
-                );
-            })}
-        </>
-    );
-
     return (
         <ActionBarMenu
             isOpen={isOpen}
-            displayValue={numResults}
-            label='NUM RESULTS'
+            displayValue={displayCountry}
+            label='COUNTRY'
             icon={
                 <Icon
                     alt='results-icon'
                     height={40}
-                    svg={iconList}
+                    svg={iconGlobe}
                     width={40}
                 />
             }
-            onClick={onClickNumResultsMenu}
+            onClick={onClickCountryMenu}
         >
             <div
                 className={clsx(
@@ -91,7 +97,8 @@ export default function NumResults() {
                     'font-normal',
                     'text-base',
                     'transition-all',
-                    'overflow-hidden',
+                    'overflow-y-scroll',
+                    'max-h-[400px]',
                     'z-10',
                     {
                         'h-0': !isOpen,
@@ -101,14 +108,14 @@ export default function NumResults() {
                     }
                 )}
             >
-                {pageSizePicker}
+                {countryPicker}
             </div>
         </ActionBarMenu>
-    );
+    )
     return (
         <div
             className='flex relative mb-6 sm:mb-0 sm:max-w-[200px] md:max-w-[260px] sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer'
-            onClick={onClickNumResultsMenu}
+            onClick={onClickCountryMenu}
         >
             <div
                 className={clsx(
@@ -135,27 +142,23 @@ export default function NumResults() {
                     }
                 )}
             >
-                {pageSizePicker}
+                {countryPicker}
             </div>
             <div className='relative'>
                 <Icon
                     alt='results-icon'
                     height={40}
-                    svg={iconList}
+                    svg={iconGlobe}
                     width={40}
                 />
             </div>
             <div className='flex flex-col ml-6'>
-                <div className='flex  items-center font-poppins font-medium text-neutral-400 text-xs tracking-wider cursor-pointer'>
-                    <span className='inline-block sm:hidden mr-1'>#</span>
-                    <span className='hidden sm:inline-block mr-1'>
-                        NUM
-                    </span>{' '}
-                    RESULTS
+                <div className='flex items-center font-poppins font-medium text-neutral-400 text-xs tracking-wider cursor-pointer'>
+                    COUNTRY
                     <div className='ml-1'>{chevron}</div>
                 </div>
                 <div className='font-poppins font-normal text-black text-base'>
-                    {numResults}
+                    {displayCountry}
                 </div>
             </div>
         </div>
