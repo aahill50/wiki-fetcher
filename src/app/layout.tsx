@@ -1,7 +1,7 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { lora, poppins } from '~/fonts/fonts';
 import clsx from 'clsx';
+import type { Metadata } from 'next';
+import { lora, poppins } from '~/fonts/fonts';
+import './globals.css';
 
 export const metadata: Metadata = {
     title: 'Wiki Fetcher',

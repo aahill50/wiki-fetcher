@@ -1,14 +1,14 @@
-import { DAY_LABELS, MONTHS } from '~/constants';
+import { useCallback, useEffect, useState } from 'react';
+import clsx from 'clsx';
 import { useStore } from '~/store';
 import { PrevMonth } from './PrevMonth';
 import { NextMonth } from './NextMonth';
-import clsx from 'clsx';
 import {
     getCalendarMonths as getCalendarMonths,
     FormattedDate,
     getDisplayMonth,
 } from './calendarUtilities';
-import { useCallback, useEffect, useState } from 'react';
+import { DAY_LABELS, MONTHS } from '~/constants';
 
 interface Props {
     isOpen: boolean;
@@ -27,15 +27,34 @@ export default function Calendar(props: Props) {
     const [calendarMonths, setCalendarMonths] = useState<
         Map<string, FormattedDate[]>
     >(new Map());
-
     const [selectedDate, setSelectedDate] = useState<FormattedDate | null>(
         null
     );
     const [displayMonth, setDisplayMonth] = useState<string>(
         getDisplayMonth({ month: selectedMonth, year: selectedYear })
     );
+    const calendarLabel = `${MONTHS[selectedMonth]} ${selectedYear}`;
 
-    const selectedMonthAndYear = `${MONTHS[selectedMonth]} ${selectedYear}`;
+    const isNextMonthValid = () => {
+        const nextMonth = selectedMonth + 1 >= 12 ? 1 : selectedMonth + 1;
+        const nextMonthYear = nextMonth === 1 ? selectedYear + 1 : selectedYear;
+        const nextDisplayMonth = getDisplayMonth({
+            month: nextMonth,
+            year: nextMonthYear,
+        });
+        return !!calendarMonths.get(nextDisplayMonth);
+    };
+
+    const isPrevMonthValid = () => {
+        const prevMonth = selectedMonth - 1 <= 0 ? 12 : selectedMonth - 1;
+        const prevMonthYear =
+            prevMonth === 12 ? selectedYear - 1 : selectedYear;
+        const prevDisplayMonth = getDisplayMonth({
+            month: prevMonth,
+            year: prevMonthYear,
+        });
+        return !!calendarMonths.get(prevDisplayMonth);
+    };
 
     const daysHeader = (
         <>
@@ -56,24 +75,34 @@ export default function Calendar(props: Props) {
     }, []);
 
     useEffect(() => {
-        const currentDisplayMonth = displayMonth;
         const nextDisplayMonth = getDisplayMonth({
             month: selectedMonth,
             year: selectedYear,
         });
-        const _displayMonth = calendarMonths?.get(nextDisplayMonth)?.length
-            ? calendarMonths?.get(nextDisplayMonth)
-            : calendarMonths?.get(currentDisplayMonth);
 
-        const _selectedDate =
-            _displayMonth?.find(
+        const isNextMonthValid = !!calendarMonths?.get(nextDisplayMonth);
+        const activeDisplayMonth = isNextMonthValid
+            ? calendarMonths?.get(nextDisplayMonth)
+            : calendarMonths?.get(displayMonth);
+
+        const lastDayOfMonth = [...(activeDisplayMonth || [])].findLast(
+            (date) => date.month === selectedMonth
+        ) as FormattedDate;
+        const activeSelectedDate =
+            activeDisplayMonth?.find(
                 (date) =>
                     date.year === selectedYear &&
                     date.month === selectedMonth &&
                     date.day === selectedDay
-            ) ?? selectedDate;
-        setSelectedDate(_selectedDate ?? null);
-        setDisplayMonth(nextDisplayMonth);
+            ) ?? lastDayOfMonth;
+
+        selectDay(activeSelectedDate?.day || selectedDay);
+        selectMonth(activeSelectedDate?.month || selectedMonth);
+        selectYear(activeSelectedDate?.year || selectedYear);
+        setSelectedDate(
+            isNextMonthValid ? activeSelectedDate ?? null : selectedDate
+        );
+        setDisplayMonth(isNextMonthValid ? nextDisplayMonth : displayMonth);
     }, [
         calendarMonths,
         displayMonth,
@@ -172,11 +201,11 @@ export default function Calendar(props: Props) {
         >
             <div className='justify-center'>
                 <div className='flex'>
-                    <PrevMonth />
+                    <PrevMonth disabled={!isPrevMonthValid()} />
                     <div className='grow text-center flex flex-col place-content-center font-poppins font-medium text-base'>
-                        {selectedMonthAndYear}
+                        {calendarLabel}
                     </div>
-                    <NextMonth />
+                    <NextMonth disabled={!isNextMonthValid()} />
                 </div>
                 <div className='grid grid-cols-7 grid-rows-5'>
                     {daysHeader}

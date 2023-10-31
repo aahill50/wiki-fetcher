@@ -2,10 +2,10 @@
 
 import { useCallback } from 'react';
 import { useStore } from '~/store';
-import { getDisplayPageNumbers } from '~/utilities';
 import PageNumber from './PageNumber';
 import PrevPage from './PrevPage';
 import NextPage from './NextPage';
+import { getDisplayPageNumbers } from '~/utilities';
 
 export default function Pagination() {
     const articles = useStore((state) => state.articles);

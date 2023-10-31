@@ -127,14 +127,6 @@ const getDiffInDays = (date1: Date, date2: Date): number => {
     );
 };
 
-export interface CalendarDaysIndexMap {
-    [year: number]: {
-        [month: number]: {
-            [day: number]: number;
-        };
-    };
-}
-
 const getCalendarDays = () => {
     const day = new Date(FIRST_SUNDAY);
     const diffInDays = getDiffInDays(getToday(), day);

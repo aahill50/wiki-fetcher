@@ -1,16 +1,16 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import { useStore } from '~/store';
-import Icon from './Icon';
-import { getArticlesForPage, prettyNumbers } from '~/utilities';
-import iconPinEmpty from '~/assets/icon_pin_empty.svg';
-import iconPinFilled from '~/assets/icon_pin_filled.svg';
-import { Article } from '~/types';
-import api, { SummaryResponse } from '~/api';
 import clsx from 'clsx';
 import Image from 'next/image';
+import { useStore } from '~/store';
+import api, { SummaryResponse } from '~/api';
+import { getArticlesForPage, prettyNumbers } from '~/utilities';
+import Icon from './Icon';
+import iconPinEmpty from '~/assets/icon_pin_empty.svg';
+import iconPinFilled from '~/assets/icon_pin_filled.svg';
+import { type StaticImport } from 'next/dist/shared/lib/get-img-props';
+import { type Article } from '~/types';
 
 export default function Results() {
     const articles = useStore((state) => state.articles);
@@ -34,9 +34,11 @@ export default function Results() {
 
     const onClickArticle = useCallback(
         async (article: Article) => {
-            setShowDetails(!showDetails);
             const isActiveArticle =
                 articleDetails?.originalTitle === article.originalTitle;
+            // Toggle details open/closed when clicking the active article, otherwise keep details open when clicking new article
+            const show = isActiveArticle ? !showDetails : showDetails;
+            setShowDetails(show);
 
             const res = isActiveArticle
                 ? articleDetails
@@ -75,9 +77,9 @@ export default function Results() {
         const hasImage = !!articleDetails?.thumbnail?.source;
         const isActiveArticle =
             articleDetails?.originalTitle === article.originalTitle;
-        const showDetails = isActiveArticle && hasDetails;
+        const show = showDetails && isActiveArticle && hasDetails;
 
-        return !showDetails ? null : (
+        return !show ? null : (
             <div className='flex mt-5'>
                 {!hasImage ? null : (
                     <div className='max-w-[100px] h-fit'>
@@ -136,7 +138,7 @@ export default function Results() {
                         {article.rank}
                     </div>
                 )}
-                <div className='font-lora text-base grow mr-4 text-black font-medium'>
+                <div className='font-lora text-base grow mr-4 text-black font-medium cursor-pointer'>
                     {article.article}
                 </div>
                 <div className='font-poppins text-sm shrink-0 text-neutral-500  font-normal'>

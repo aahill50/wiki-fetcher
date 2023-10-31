@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Icon from '../../Icon';
-import iconCalendar from '~/assets/icon_calendar.svg';
 import { useStore } from '~/store';
+import Icon from '../../Icon';
 import Calendar from './Calendar';
 import ActionBarMenu from '../ActionBarMenu';
+import iconCalendar from '~/assets/icon_calendar.svg';
 import { MENUS } from '~/constants';
 
 export default function DatePicker() {

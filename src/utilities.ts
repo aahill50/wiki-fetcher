@@ -1,5 +1,5 @@
 import { NUM_PAGES_TO_DISPLAY } from './constants';
-import { Article } from './types';
+import { type Article } from './types';
 
 const articlesToExclude: Record<string, boolean> = {
     Main_Page: true,

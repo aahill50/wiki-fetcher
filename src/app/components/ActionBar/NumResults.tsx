@@ -2,12 +2,12 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
+import { useStore } from '~/store';
+import ActionBarMenu from './ActionBarMenu';
 import Icon from '../Icon';
 import iconList from '~/assets/icon_list.svg';
 import iconChevronUp from '~/assets/icon_chevron_up.svg';
-import { useStore } from '~/store';
 import { MENUS, NUM_RESULTS } from '~/constants';
-import ActionBarMenu from './ActionBarMenu';
 
 export default function NumResults() {
     const numResults = useStore((state) => state.numResults);

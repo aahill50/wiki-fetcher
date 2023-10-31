@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Article } from './types';
 import { COUNTRY_CODE, MENU_KEY, PAGE_SIZE } from './constants';
+import { type Article } from './types';
 interface StoreStateGetters {
     articles: Article[];
     country: COUNTRY_CODE;

@@ -1,8 +1,8 @@
-import Icon from '../Icon';
-import iconChevronRight from '../../../assets/icon_chevron_right.svg';
-import { useStore } from '~/store';
-import { getAllPageNumbers, getNumPages } from '~/utilities';
 import clsx from 'clsx';
+import { useStore } from '~/store';
+import Icon from '../Icon';
+import { getAllPageNumbers, getNumPages } from '~/utilities';
+import iconChevronRight from '../../../assets/icon_chevron_right.svg';
 
 interface Props {
     onClick: (pageNumber: number) => void;

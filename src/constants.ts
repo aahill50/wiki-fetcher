@@ -1,4 +1,4 @@
-import { Access, Project } from './types';
+import { type Access, type Project } from './types';
 
 export const PAGEVIEWS_ENDPOINT_ROOT =
     'https://wikimedia.org/api/rest_v1/metrics/pageviews';

@@ -1,8 +1,15 @@
-import iconChevronLeft from '~/assets/icon_chevron_left.svg';
-import Icon from '../../Icon';
+import { useCallback } from 'react';
 import { useStore } from '~/store';
+import Icon from '../../Icon';
+import iconChevronLeft from '~/assets/icon_chevron_left.svg';
 
-export function PrevMonth() {
+interface Props {
+    disabled: boolean;
+}
+
+export function PrevMonth(props: Props) {
+    const { disabled } = props;
+
     const selectedMonth = useStore((state) => state.selectedMonth);
     const selectedYear = useStore((state) => state.selectedYear);
     const selectMonth = useStore((state) => state.selectMonth);
@@ -12,7 +19,10 @@ export function PrevMonth() {
         return (monthNumber === 1 ? 12 : monthNumber - 1) as T;
     };
 
-    const onClickPrevMonth = () => {
+    const onClickPrevMonth = useCallback(() => {
+        if (disabled) {
+            return;
+        }
         const prevMonth = getPreviousMonth(selectedMonth);
 
         selectMonth(prevMonth);
@@ -20,7 +30,7 @@ export function PrevMonth() {
         if (prevMonth === 12) {
             selectYear(selectedYear - 1);
         }
-    };
+    }, [disabled, selectMonth, selectYear, selectedMonth, selectedYear]);
 
     return (
         <div onClick={onClickPrevMonth}>

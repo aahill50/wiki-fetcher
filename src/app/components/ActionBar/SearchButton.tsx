@@ -1,10 +1,11 @@
 'use client';
-import clsx from 'clsx';
+
 import { useCallback } from 'react';
-import api from '~/api';
-import { averta } from '~/fonts/fonts';
+import clsx from 'clsx';
 import { useStore } from '~/store';
+import api from '~/api';
 import { formatArticles } from '~/utilities';
+import { averta } from '~/fonts/fonts';
 
 export default function SearchButton() {
     const selectedDay = useStore((state) => state.selectedDay);

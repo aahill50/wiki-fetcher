@@ -1,10 +1,10 @@
-import { Article } from './types';
 import {
     formatArticles,
     getArticlesForPage,
     getDisplayPageNumbers,
     prettyNumbers,
 } from './utilities';
+import { type Article } from './types';
 
 const createMockArticles = (count: number): Article[] => {
     return Array(count)

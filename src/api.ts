@@ -3,7 +3,7 @@ import {
     ENDPOINT_SEGMENT,
     PAGE_ENDPOINT_ROOT,
 } from './constants';
-import { Access, Country, Project } from './types';
+import { type Access, type Country, type Project } from './types';
 
 interface PageviewsByDayApiCallOpts {
     project: Project;
@@ -34,7 +34,9 @@ export type ApiCallOpts =
 export const padLeft = (str: string): string =>
     str.length > 1 ? str : `0${str}`.slice(-2);
 
-export const pageviewsByDayPerCountry = (opts: PageviewsByDayPerCountryApiCallOpts) =>
+export const pageviewsByDayPerCountry = (
+    opts: PageviewsByDayPerCountryApiCallOpts
+) =>
     [
         PAGEVIEWS_ENDPOINT_ROOT,
         ENDPOINT_SEGMENT.pageviewsByDayPerCountry,

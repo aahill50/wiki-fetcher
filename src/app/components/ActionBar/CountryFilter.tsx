@@ -1,12 +1,12 @@
 'use client';
 
-import clsx from 'clsx';
-import { COUNTRY_CODE, COUNTRY_CODES, MENUS } from '~/constants';
-import Icon from '../Icon';
-import { useStore } from '~/store';
-import iconGlobe from '~/assets/icon_globe.svg';
 import { useCallback, useEffect, useState } from 'react';
+import clsx from 'clsx';
+import { useStore } from '~/store';
 import ActionBarMenu from './ActionBarMenu';
+import Icon from '../Icon';
+import iconGlobe from '~/assets/icon_globe.svg';
+import { COUNTRY_CODE, COUNTRY_CODES, MENUS } from '~/constants';
 
 export default function CountryFilter() {
     const country = useStore((state) => state.country);
