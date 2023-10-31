@@ -7,6 +7,7 @@ const config = {
     collectCoverage: true,
     collectCoverageFrom: ['src/**'],
     coverageDirectory: 'coverage',
+    coveragePathIgnorePatterns: ['store.ts', 'types.ts'],
     coverageProvider: 'v8',
     moduleNameMapper: {
         '^~/(.*)$': '<rootDir>/src/$1',

@@ -31,10 +31,10 @@ export type ApiCallOpts =
     | SummaryApiCallOpts;
 
 // Used to ensure day and month numbers get padded with a leading 0 when converted to String
-const padLeft = (str: string): string =>
+export const padLeft = (str: string): string =>
     str.length > 1 ? str : `0${str}`.slice(-2);
 
-const pageviewsByDayPerCountry = (opts: PageviewsByDayPerCountryApiCallOpts) =>
+export const pageviewsByDayPerCountry = (opts: PageviewsByDayPerCountryApiCallOpts) =>
     [
         PAGEVIEWS_ENDPOINT_ROOT,
         ENDPOINT_SEGMENT.pageviewsByDayPerCountry,
@@ -45,7 +45,7 @@ const pageviewsByDayPerCountry = (opts: PageviewsByDayPerCountryApiCallOpts) =>
         padLeft(String(opts.day)),
     ].join('/');
 
-const pageviewsByDay = (opts: PageviewsByDayApiCallOpts) =>
+export const pageviewsByDay = (opts: PageviewsByDayApiCallOpts) =>
     [
         PAGEVIEWS_ENDPOINT_ROOT,
         ENDPOINT_SEGMENT.pageviewsByDay,
@@ -56,7 +56,7 @@ const pageviewsByDay = (opts: PageviewsByDayApiCallOpts) =>
         padLeft(String(opts.day)),
     ].join('/');
 
-const articleSummary = (opts: SummaryApiCallOpts) =>
+export const articleSummary = (opts: SummaryApiCallOpts) =>
     [PAGE_ENDPOINT_ROOT, ENDPOINT_SEGMENT.summary, opts.article].join('/');
 
 interface PageviewsByDayResponseArticle {
