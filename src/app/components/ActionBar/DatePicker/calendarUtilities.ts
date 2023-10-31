@@ -119,7 +119,7 @@ const getDiffInMs = (date1: Date, date2: Date): number => {
     return Math.abs(date1.getTime() - date2.getTime());
 };
 
-const getDiffInDays = (date1: Date, date2: Date): number => {
+export const getDiffInDays = (date1: Date, date2: Date): number => {
     const diffInMs = getDiffInMs(date1, date2);
 
     return (
