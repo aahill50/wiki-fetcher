@@ -1,10 +1,10 @@
 {
   "name": "wiki-fetcher",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run test && npm run typecheck && npm run lint && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
