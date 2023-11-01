@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Wiki Fetcher
 
-## Getting Started
+This app allows a user to search for the most viewed wiki pages for a specific date. The user can select the day they wish to see reuslts for and decide how many results they wish to see. The articles are displayed by rank and show the number of times it was viewed that day.
 
-First, run the development server:
+Additionally, the user can pin articles, which remain visible at the top of each page and persist through reloads. The user can also click on an article to see a brief summary of the wiki article along with the top 3 most viewed days that month for the article.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Endpoints
+
+This app uses 3 different endpoints to aggregate data:
+
+### PageviewsByDay
+
+Returns page views for the top 1000 articles for the given day
+
+**Endpoint**
+`https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-acesss/{year}/{month}/{day}`
+
+**Params**
+
+```ts
+year: number;
+month: number;
+day: number;
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Summary
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Returns a summary of the article specifed, including an extract about the article and a thumbnail
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**Endpoint**
+`https://en.wikipedia.org/api/rest_v1/page/summary/{articleTitle}`
 
-## Learn More
+**Params**
 
-To learn more about Next.js, take a look at the following resources:
+```
+articleTitle: string;
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### PageviewsByDayForArticle
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Returns pageviews for the given article over the specified time range
 
-## Deploy on Vercel
+**Endpoint**
+`https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/all-agents/{articleTitle}/daily/{startDay}/{endDay}`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Params**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```ts
+articleTitle: string;
+startDay: string; // YYYYMMDD format
+endDay: string; // YYYYMMDD format
+```
+
+## Local Development
+
+To develop locally, clone the repo, install the dependencies and start up the dev server.
+
+```bash
+> git clone git@github.com:aahill50/wiki-fetcher.git
+> npm install
+> npm run dev
+```
+
+Navigate to `http://localhost:3000/` in your web browser to see the app running.
+
+## Building for Deployment
+
+```bash
+> npm install
+> npm run build
+> npm run start
+```
+
+## Testing
+
+Unit tests are written with Jest using React Testing Library for directly testing DOM elements. Simply run the command below to run all tests
+
+```bash
+> npm run test
+```
+
+## Built With
+
+-   [react](https://react.dev/reference/react)
+-   [Next.js](https://nextjs.org/docs)'
+-   [Typescript](https://www.typescriptlang.org/docs/)
+-   [Tailwind CSS](https://tailwindcss.com/docs/)
+-   [zustand](https://github.com/pmndrs/zustand#readme) (State Management)
+-   [Jest](https://jestjs.io/docs/api)
+-   [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+-   [ESLint](https://eslint.org/docs/latest/)
