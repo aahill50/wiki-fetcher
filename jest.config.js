@@ -7,7 +7,7 @@ const config = {
     collectCoverage: true,
     collectCoverageFrom: ['src/**'],
     coverageDirectory: 'coverage',
-    coveragePathIgnorePatterns: ['fonts.ts', 'store.ts', 'types.ts'],
+    coveragePathIgnorePatterns: ['fonts.ts', 'store.ts', 'types.ts', '.*\.snap'],
     coverageProvider: 'v8',
     moduleNameMapper: {
         '^~/(.*)$': '<rootDir>/src/$1',

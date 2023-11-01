@@ -35,25 +35,28 @@ describe('getDiffInDays', () => {
 });
 
 describe('getCalendarMonths', () => {
+    it('should return a Map of calendar months', () => {
+        const calendarMonths = getCalendarMonths();
+
+        expect(calendarMonths).toBeInstanceOf(Map);
+    });
+
+    it.each([
+        { month: 'April 2015' },
+        { month: 'May 2015' },
+        { month: 'June 2023' },
+        { month: 'October 2023' },
+    ])('"$month" should be a valid key', ({ month }) => {
+        const calendarMonths = getCalendarMonths();
+
+        expect(calendarMonths.get(month)).toBeDefined();
+    });
+
     it.each([
         { month: 'March 2015', expectation: 'not valid' },
-        { month: 'April 2015', expectation: 'valid' },
-        { month: 'May 2015', expectation: 'valid' },
-        { month: 'June 2023', expectation: 'valid' },
-        { month: 'October 2023', expectation: 'valid' },
         { month: 'January 2055', expectation: 'not valid' },
-    ])(
-        'should return a Map of calendar months for all valid months. Expect $month to be $expectation',
-        ({ month, expectation }) => {
-            const calendarMonths = getCalendarMonths();
-
-            expect(calendarMonths).toBeInstanceOf(Map);
-
-            if (expectation === 'valid') {
-                expect(calendarMonths.get(month)).toBeDefined();
-            } else {
-                expect(calendarMonths.get(month)).toBeUndefined();
-            }
-        }
-    );
+    ])('"$month" should not be a valid key', ({ month }) => {
+        const calendarMonths = getCalendarMonths();
+        expect(calendarMonths.get(month)).toBeUndefined();
+    });
 });

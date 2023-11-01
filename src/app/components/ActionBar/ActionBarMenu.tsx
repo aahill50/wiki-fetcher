@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function ActionBarMenu(props: Props) {
-    const { icon, isOpen, label,  displayValue, children,onClick } = props;
+    const { icon, isOpen, label, displayValue, children, onClick } = props;
 
     const chevron = (
         <div
@@ -30,7 +30,7 @@ export default function ActionBarMenu(props: Props) {
         </div>
     );
 
-    return  (
+    return (
         <div className='flex relative mb-6 sm:mb-0 sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer max-w-[240px]'>
             {icon}
             <div className='flex flex-col ml-6' onClick={onClick}>

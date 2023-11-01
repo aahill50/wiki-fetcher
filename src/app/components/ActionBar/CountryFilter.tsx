@@ -39,6 +39,10 @@ export default function CountryFilter() {
         [setCountry]
     );
 
+    const isActiveCountry = (countryCode: COUNTRY_CODE) => {
+        return countryCode === country;
+    };
+
     const countryPicker = (
         <>
             {Object.keys(COUNTRY_CODES)
@@ -52,6 +56,8 @@ export default function CountryFilter() {
                     const countryName = COUNTRY_CODES[code];
                     return (
                         <div
+                            role='option'
+                            aria-selected={isActiveCountry(code)}
                             key={`page-size-${code}`}
                             className='flex mb-6 last:mb-0 text-xs'
                             onClick={() => onClickCountry(code)}

@@ -24,7 +24,7 @@ interface StoreStateSetters {
     setNumResults: (pageSize: number) => void;
 }
 
-interface StoreState extends StoreStateGetters, StoreStateSetters {}
+export interface StoreState extends StoreStateGetters, StoreStateSetters {}
 
 const yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);

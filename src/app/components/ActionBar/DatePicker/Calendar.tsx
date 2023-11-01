@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useStore } from '~/store';
-import { PrevMonth } from './PrevMonth';
-import { NextMonth } from './NextMonth';
+import PrevMonth from './PrevMonth';
+import NextMonth from './NextMonth';
 import {
     getCalendarMonths as getCalendarMonths,
     FormattedDate,
@@ -110,6 +110,9 @@ export default function Calendar(props: Props) {
         selectedMonth,
         selectedYear,
         selectedDate,
+        selectDay,
+        selectMonth,
+        selectYear,
     ]);
 
     const onClickDate = useCallback(
@@ -146,8 +149,8 @@ export default function Calendar(props: Props) {
         typeof calendarMonths !== 'undefined' && displayMonth !== null;
     const calendarBody = !showCalendar ? null : (
         <>
-            {calendarMonths.get(displayMonth)?.map((formattedDay) => (
-                <>
+            {calendarMonths.get(displayMonth)?.map((formattedDay, index) => (
+                <div key={`${displayMonth}_${index}`}>
                     <div
                         className={clsx(
                             'flex flex-col place-content-center text-center w-12 h-12 rounded-full font-poppins text-sm',
@@ -167,13 +170,15 @@ export default function Calendar(props: Props) {
                     >
                         {formattedDay.day}
                     </div>
-                </>
+                </div>
             ))}
         </>
     );
 
     return (
         <div
+            role='document'
+            aria-label='calendar'
             className={clsx(
                 'absolute',
                 'flex',

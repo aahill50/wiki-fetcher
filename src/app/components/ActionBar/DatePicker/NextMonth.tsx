@@ -7,7 +7,7 @@ interface Props {
     disabled: boolean;
 }
 
-export function NextMonth(props: Props) {
+export default function NextMonth(props: Props) {
     const { disabled } = props;
 
     const selectMonth = useStore((state) => state.selectMonth);
@@ -33,7 +33,7 @@ export function NextMonth(props: Props) {
     }, [disabled, selectMonth, selectYear, selectedMonth, selectedYear]);
 
     return (
-        <div onClick={onClickNextMonth}>
+        <div onClick={onClickNextMonth} role='button' aria-label='next-month'>
             <Icon
                 alt='next-month'
                 width={24}

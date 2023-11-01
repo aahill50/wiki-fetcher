@@ -4,19 +4,8 @@ import {
     getDisplayPageNumbers,
     prettyNumbers,
 } from './utilities';
+import { createMockArticles } from './testUtilities';
 import { type Article } from './types';
-
-const createMockArticles = (count: number): Article[] => {
-    return Array(count)
-        .fill(0)
-        .map((_, n) => ({
-            article: `Test-${n + 1}`,
-            originalTitle: `Test-${n + 1}`,
-            rank: n + 1,
-            views: 1000 - n,
-            key: 'article-key',
-        }));
-};
 
 describe('prettyNumbers', () => {
     it('should convert a number to a string', () => {

@@ -7,7 +7,7 @@ interface Props {
     disabled: boolean;
 }
 
-export function PrevMonth(props: Props) {
+export default function PrevMonth(props: Props) {
     const { disabled } = props;
 
     const selectedMonth = useStore((state) => state.selectedMonth);
@@ -33,7 +33,7 @@ export function PrevMonth(props: Props) {
     }, [disabled, selectMonth, selectYear, selectedMonth, selectedYear]);
 
     return (
-        <div onClick={onClickPrevMonth}>
+        <div onClick={onClickPrevMonth} role='button' aria-label='prev-month'>
             <Icon
                 alt='prev-month'
                 width={24}
