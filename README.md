@@ -4,6 +4,35 @@ This app allows a user to search for the most viewed wiki pages for a specific d
 
 Additionally, the user can pin articles, which remain visible at the top of each page and persist through reloads. The user can also click on an article to see a brief summary of the wiki article along with the top 3 most viewed days that month for the article.
 
+## Local Development
+
+To develop locally, clone the repo, install the dependencies and start up the dev server.
+
+```bash
+> git clone git@github.com:aahill50/wiki-fetcher.git
+> cd wiki-fetcher
+> npm install
+> npm run dev
+```
+
+Navigate to `http://localhost:3000/` in your web browser to see the app running.
+
+## Building for Deployment
+
+```bash
+> npm install
+> npm run build
+> npm run start
+```
+
+## Testing
+
+Unit tests are written with Jest using React Testing Library for directly testing DOM elements. Simply run the command below to run all tests
+
+```bash
+> npm run test
+```
+
 ## Endpoints
 
 This app uses 3 different endpoints to aggregate data:
