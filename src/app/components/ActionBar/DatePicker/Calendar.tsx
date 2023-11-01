@@ -26,6 +26,7 @@ export default function Calendar(props: Props) {
     const selectDay = useStore((state) => state.selectDay);
     const selectMonth = useStore((state) => state.selectMonth);
     const selectYear = useStore((state) => state.selectYear);
+    const setOpenMenu = useStore((state) => state.setOpenMenu);
 
     const [calendarMonths, setCalendarMonths] = useState<
         Map<string, FormattedDate[]>
@@ -110,6 +111,7 @@ export default function Calendar(props: Props) {
             selectDay(day);
             selectMonth(month);
             selectYear(year);
+            setOpenMenu(null);
         },
         [selectDay, selectMonth, selectYear]
     );
