@@ -7,13 +7,22 @@ interface Props {
     icon: ReactNode;
     isOpen: boolean;
     label: string;
+    smallLabel?: string;
     displayValue: ReactNode;
     children: ReactNode;
     onClick: () => void;
 }
 
 export default function ActionBarMenu(props: Props) {
-    const { icon, isOpen, label, displayValue, children, onClick } = props;
+    const {
+        icon,
+        isOpen,
+        label,
+        smallLabel = label,
+        displayValue,
+        children,
+        onClick,
+    } = props;
 
     const chevron = (
         <div
@@ -31,14 +40,17 @@ export default function ActionBarMenu(props: Props) {
     );
 
     return (
-        <div className='flex relative mb-6 sm:mb-0 sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer max-w-[240px]'>
+        <div className='grow flex relative mb-6 sm:mb-0 sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer transition-all'>
             {icon}
             <div className='flex flex-col ml-6' onClick={onClick}>
                 <div className='flex items-center font-poppins font-medium text-neutral-400 text-xs tracking-wider cursor-pointer'>
-                    <span>{label}</span>
+                    <span className={'visible sm:max-md:hidden'}>{label}</span>
+                    <span className={'max-sm:hidden md:hidden sm:visible'}>
+                        {smallLabel}
+                    </span>
                     <div className='ml-1'>{chevron}</div>
                 </div>
-                <div className='font-poppins font-normal text-black text-base sm:max-md:text-xs text-ellipsis overflow-hidden'>
+                <div className='font-poppins font-normal text-black text-base sm:max-md:text-sm text-ellipsis overflow-hidden'>
                     {displayValue}
                 </div>
             </div>

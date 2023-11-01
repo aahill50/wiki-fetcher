@@ -15,7 +15,6 @@ export const createMockArticles = (count: number): Article[] => {
 
 export const mockState: StoreState = {
     articles: createMockArticles(100),
-    country: 'US',
     numResults: 10,
     openMenu: null,
     page: 1,
@@ -27,7 +26,6 @@ export const mockState: StoreState = {
     selectMonth: jest.fn(),
     selectYear: jest.fn(),
     setArticles: jest.fn(),
-    setCountry: jest.fn(),
     setOpenMenu: jest.fn(),
     setPage: jest.fn(),
     setNumResults: jest.fn(),

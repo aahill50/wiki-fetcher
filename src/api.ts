@@ -2,20 +2,12 @@ import {
     PAGEVIEWS_ENDPOINT_ROOT,
     ENDPOINT_SEGMENT,
     PAGE_ENDPOINT_ROOT,
+    MONTHS,
 } from './constants';
-import { type Access, type Country, type Project } from './types';
+import { type Access, type Project } from './types';
+import { getLastDayOfMonth } from './utilities';
 
 interface PageviewsByDayApiCallOpts {
-    project: Project;
-    access: Access;
-    year: number;
-    month: number;
-    day: number;
-}
-
-interface PageviewsByDayPerCountryApiCallOpts {
-    country: Country;
-    access: Access;
     year: number;
     month: number;
     day: number;
@@ -23,36 +15,30 @@ interface PageviewsByDayPerCountryApiCallOpts {
 
 interface SummaryApiCallOpts {
     article: string;
+    month: number;
+    year: number;
 }
 
-export type ApiCallOpts =
-    | PageviewsByDayApiCallOpts
-    | PageviewsByDayPerCountryApiCallOpts
-    | SummaryApiCallOpts;
+interface PageviewsByDayForArticleApiCallOpts {
+    article: string;
+    year: number;
+    month: number;
+    startDay: number;
+    endDay: number;
+}
+
+export type ApiCallOpts = PageviewsByDayApiCallOpts | SummaryApiCallOpts;
 
 // Used to ensure day and month numbers get padded with a leading 0 when converted to String
 export const padLeft = (str: string): string =>
     str.length > 1 ? str : `0${str}`.slice(-2);
 
-export const pageviewsByDayPerCountry = (
-    opts: PageviewsByDayPerCountryApiCallOpts
-) =>
-    [
-        PAGEVIEWS_ENDPOINT_ROOT,
-        ENDPOINT_SEGMENT.pageviewsByDayPerCountry,
-        opts.country,
-        opts.access,
-        opts.year,
-        padLeft(String(opts.month)),
-        padLeft(String(opts.day)),
-    ].join('/');
-
 export const pageviewsByDay = (opts: PageviewsByDayApiCallOpts) =>
     [
         PAGEVIEWS_ENDPOINT_ROOT,
         ENDPOINT_SEGMENT.pageviewsByDay,
-        opts.project,
-        opts.access,
+        'en.wikipedia',
+        'all-access',
         opts.year,
         padLeft(String(opts.month)),
         padLeft(String(opts.day)),
@@ -60,6 +46,29 @@ export const pageviewsByDay = (opts: PageviewsByDayApiCallOpts) =>
 
 export const articleSummary = (opts: SummaryApiCallOpts) =>
     [PAGE_ENDPOINT_ROOT, ENDPOINT_SEGMENT.summary, opts.article].join('/');
+
+export const pageviewsByDayForArticle = (
+    opts: PageviewsByDayForArticleApiCallOpts
+) =>
+    [
+        PAGEVIEWS_ENDPOINT_ROOT,
+        ENDPOINT_SEGMENT.pageviewsByDayForArticle,
+        'en.wikipedia',
+        'all-access',
+        'all-agents',
+        opts.article,
+        'daily',
+        [
+            opts.year,
+            padLeft(String(opts.month)),
+            padLeft(String(opts.startDay)),
+        ].join(''),
+        [
+            opts.year,
+            padLeft(String(opts.month)),
+            padLeft(String(opts.endDay)),
+        ].join(''),
+    ].join('/');
 
 interface PageviewsByDayResponseArticle {
     article: string;
@@ -73,23 +82,6 @@ interface PageviewsByDayResponseJson {
         day: string;
         month: string;
         project: Project;
-        year: string;
-    }[];
-}
-
-interface PageviewsByDayPerCountryResponseArticle {
-    article: string;
-    project: Project;
-    rank: number;
-    views_ceil: number;
-}
-interface PageviewsByDayPerCountryResponseJson {
-    items: {
-        access: Access;
-        articles: PageviewsByDayPerCountryResponseArticle[];
-        country: Country;
-        day: string;
-        month: string;
         year: string;
     }[];
 }
@@ -114,10 +106,24 @@ interface SummaryResponseJson {
     };
 }
 
-export type SummaryResponse = SummaryResponseJson & { originalTitle: string };
+interface DetailsResponseJson {
+    items: {
+        project: Project;
+        article: string;
+        timestamp: string;
+        views: number;
+    }[];
+}
+
+type ArticleDailyView = { date: string; views: number };
+
+export type SummaryResponse = SummaryResponseJson & {
+    originalTitle: string;
+    views: ArticleDailyView[];
+};
 
 const api = {
-    getPageViewsByDay: async (
+    pageviewsByDay: async (
         opts: PageviewsByDayApiCallOpts
     ): Promise<PageviewsResponse> => {
         const endpoint = pageviewsByDay(opts);
@@ -144,47 +150,43 @@ const api = {
             ],
         };
     },
-    getPageviewsByDayPerCountry: async (
-        opts: PageviewsByDayPerCountryApiCallOpts
-    ): Promise<PageviewsResponse> => {
-        const endpoint = pageviewsByDayPerCountry(opts);
-        const res = await fetch(endpoint);
-        const json: PageviewsByDayPerCountryResponseJson = await res.json();
+    summary: async (opts: SummaryApiCallOpts): Promise<SummaryResponse> => {
+        const articleSummaryEndpoint = articleSummary(opts);
+        const articleDetailsEndpoint = pageviewsByDayForArticle({
+            ...opts,
+            startDay: 1,
+            endDay: getLastDayOfMonth(opts.month, opts.year),
+        });
 
-        const articles = json.items?.[0].articles.map(
-            ({
-                article,
-                rank,
-                views_ceil,
-            }: PageviewsByDayPerCountryResponseArticle) =>
-                ({
-                    article,
-                    originalTitle: article,
-                    rank,
-                    views: views_ceil,
-                } || [])
-        );
+        const [summary, details] = await Promise.all([
+            fetch(articleSummaryEndpoint),
+            fetch(articleDetailsEndpoint),
+        ]);
+        const summaryJson: SummaryResponseJson = await summary.json();
+        const detailsJson: DetailsResponseJson = await details.json();
+        const views = detailsJson?.items?.map((item) => {
+            const timestamp = item?.timestamp;
+            const year = timestamp.slice(0, 4);
+            const month = Number(timestamp.slice(4, 6));
+            const day = Number(timestamp.slice(6, 8));
+            const date = `${MONTHS[month]} ${day}, ${year}`;
 
-        return {
-            ...json,
-            items: [
-                {
-                    ...json?.items?.[0],
-                    articles,
-                },
-            ],
+            return {
+                date,
+                views: item?.views || 0,
+            };
+        });
+
+        const viewsCompareFn = (a: ArticleDailyView, b: ArticleDailyView) => {
+            return b.views - a.views;
         };
-    },
-    getSummary: async (opts: SummaryApiCallOpts): Promise<SummaryResponse> => {
-        const endpoint = articleSummary(opts);
-        const res = await fetch(endpoint);
-        const json: SummaryResponseJson = await res.json();
 
         return {
-            description: json.description,
-            extract: json.extract,
+            description: summaryJson.description,
+            extract: summaryJson.extract,
             originalTitle: opts.article,
-            thumbnail: json.thumbnail,
+            thumbnail: summaryJson.thumbnail,
+            views: views?.sort(viewsCompareFn) || [],
         };
     },
 };

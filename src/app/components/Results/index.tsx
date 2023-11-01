@@ -2,15 +2,19 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useStore } from '~/store';
-import api, { SummaryResponse } from '~/api';
+import api from '~/api';
 import { getArticlesForPage } from '~/utilities';
 import Article from '../Article';
+import classes from '../classes';
+import { type SummaryResponse } from '~/api';
 import { type Article as Type_Article } from '~/types';
 
 export default function Results() {
     const articles = useStore((state) => state.articles);
     const page = useStore((state) => state.page);
     const pageSize = useStore((state) => state.pageSize);
+    const selectedMonth = useStore((state) => state.selectedMonth);
+    const selectedYear = useStore((state) => state.selectedYear);
     const [pinnedArticles, setPinnedArticles] = useState<
         Record<string, Type_Article>
     >({});
@@ -20,6 +24,7 @@ export default function Results() {
     const [articleDetails, setArticleDetails] =
         useState<SummaryResponse | null>(null);
     const [showDetails, setShowDetails] = useState(false);
+    const [fetchError, setFetchError] = useState<Error | null>(null);
     const filteredArticles = getArticlesForPage({ articles, page, pageSize });
 
     useEffect(() => {
@@ -32,16 +37,19 @@ export default function Results() {
 
     useEffect(() => {
         const articleTitle = activeArticle?.originalTitle || '';
-        api.getSummary({
+        api.summary({
             article: articleTitle,
+            month: selectedMonth,
+            year: selectedYear,
         })
             .then((res) => {
+                setFetchError(null);
                 setArticleDetails(res);
             })
-            .catch((e) => {
-                console.log('e:', e);
+            .catch((e: Error) => {
+                setFetchError(e);
             });
-    }, [activeArticle, setArticleDetails]);
+    }, [activeArticle, setArticleDetails, selectedMonth, selectedYear]);
 
     const onClickArticle = useCallback(
         (article: Type_Article) => {
@@ -72,10 +80,21 @@ export default function Results() {
     const hasPinnedArticles = Object.keys(pinnedArticles).length > 0;
     const hasArticles = filteredArticles.length > 0;
 
-    return (
+    const errorComponent = (
+        <div className={classes.results}>
+            <div>An error has occurred, please try again.</div>
+            <pre className='bg- px-4 py-1 rounded-md text-sm bg-red-50 border'>
+                {fetchError?.toString()}
+            </pre>
+        </div>
+    );
+
+    return fetchError ? (
+        errorComponent
+    ) : (
         <>
             {!hasPinnedArticles ? null : (
-                <div className='flex flex-col gap-4 p-6 mt-6 bg-white sm:rounded-2xl shadow-[0_2px_0_1px_rgba(5,9,12,0.06)]'>
+                <div className={classes.results}>
                     {Object.keys(pinnedArticles).map((key, index) => (
                         <Article
                             key={`pinned-article-${index + 1}`}
@@ -91,7 +110,7 @@ export default function Results() {
                 </div>
             )}
             {!hasArticles ? null : (
-                <div className='flex flex-col gap-4 p-6 mt-6 bg-white sm:rounded-2xl shadow-[0_2px_0_1px_rgba(5,9,12,0.06)]'>
+                <div className={classes.results}>
                     {filteredArticles?.map((article, index) => (
                         <Article
                             key={`article-${index + 1}`}

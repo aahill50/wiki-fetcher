@@ -156,3 +156,31 @@ export const getCalendarMonths = () => {
 
     return calendarMonths;
 };
+
+export const numDaysNextMonth = (
+    selectedMonth: number,
+    selectedYear: number,
+    calendarMonths: Map<string, FormattedDate[]>
+) => {
+    const nextMonth = selectedMonth + 1 >= 12 ? 1 : selectedMonth + 1;
+    const nextMonthYear = nextMonth === 1 ? selectedYear + 1 : selectedYear;
+    const nextDisplayMonth = getDisplayMonth({
+        month: nextMonth,
+        year: nextMonthYear,
+    });
+    return !!calendarMonths.get(nextDisplayMonth)?.length;
+};
+
+export const numDaysPrevMonth = (
+    selectedMonth: number,
+    selectedYear: number,
+    calendarMonths: Map<string, FormattedDate[]>
+) => {
+    const prevMonth = selectedMonth - 1 <= 0 ? 12 : selectedMonth - 1;
+    const prevMonthYear = prevMonth === 12 ? selectedYear - 1 : selectedYear;
+    const prevDisplayMonth = getDisplayMonth({
+        month: prevMonth,
+        year: prevMonthYear,
+    });
+    return !!calendarMonths.get(prevDisplayMonth)?.length;
+};

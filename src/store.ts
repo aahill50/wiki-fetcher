@@ -1,9 +1,8 @@
 import { create } from 'zustand';
-import { COUNTRY_CODE, MENU_KEY, PAGE_SIZE } from './constants';
+import { MENU_KEY, PAGE_SIZE } from './constants';
 import { type Article } from './types';
 interface StoreStateGetters {
     articles: Article[];
-    country: COUNTRY_CODE;
     selectedDay: number;
     selectedMonth: number;
     selectedYear: number;
@@ -18,7 +17,6 @@ interface StoreStateSetters {
     selectMonth: (month: number) => void;
     selectYear: (year: number) => void;
     setArticles: (articles: Article[]) => void;
-    setCountry: (countryCode: COUNTRY_CODE) => void;
     setOpenMenu: (menu: MENU_KEY | null) => void;
     setPage: (page: number) => void;
     setNumResults: (pageSize: number) => void;
@@ -31,7 +29,6 @@ yesterday.setDate(yesterday.getDate() - 1);
 
 const defaulState = {
     articles: [],
-    country: 'US',
     selectedMonth: yesterday.getMonth() + 1,
     selectedDay: yesterday.getDate(),
     selectedYear: yesterday.getFullYear(),
@@ -43,7 +40,6 @@ const defaulState = {
 
 export const useStore = create<StoreState>((setState) => ({
     articles: defaulState.articles,
-    country: defaulState.country,
     selectedMonth: defaulState.selectedMonth,
     selectedDay: defaulState.selectedDay,
     selectedYear: defaulState.selectedYear,
@@ -55,7 +51,6 @@ export const useStore = create<StoreState>((setState) => ({
     selectMonth: (selectedMonth) => setState({ selectedMonth }),
     selectYear: (selectedYear) => setState({ selectedYear }),
     setArticles: (articles) => setState({ articles }),
-    setCountry: (country) => setState({ country }),
     setOpenMenu: (openMenu) => setState({ openMenu }),
     setPage: (page) => setState({ page }),
     setNumResults: (numResults) => setState({ numResults }),

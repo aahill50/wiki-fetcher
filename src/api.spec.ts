@@ -2,7 +2,7 @@ import {
     padLeft,
     articleSummary,
     pageviewsByDay,
-    pageviewsByDayPerCountry,
+    pageviewsByDayForArticle,
 } from './api';
 import { ENDPOINT_SEGMENT } from './constants';
 
@@ -20,7 +20,11 @@ describe('padLeft', () => {
 
 describe('articleSummary', () => {
     it('should return the correct endpoint', () => {
-        const endpoint = articleSummary({ article: 'Test_1' });
+        const endpoint = articleSummary({
+            article: 'Test_1',
+            month: 1,
+            year: 2020,
+        });
         expect(endpoint).toContain(ENDPOINT_SEGMENT.summary);
     });
 });
@@ -28,25 +32,23 @@ describe('articleSummary', () => {
 describe('pageviewsByDay', () => {
     it('should return the correct endpoint', () => {
         const endpoint = pageviewsByDay({
-            access: 'all-access',
             day: 1,
             month: 1,
-            project: 'en.wikipedia',
             year: 2023,
         });
         expect(endpoint).toContain(ENDPOINT_SEGMENT.pageviewsByDay);
     });
 });
 
-describe('pageviewsByDayPerCountry', () => {
+describe('pageviewsByDayForArticle', () => {
     it('should return the correct endpoint', () => {
-        const endpoint = pageviewsByDayPerCountry({
-            access: 'all-access',
-            country: 'US',
-            day: 1,
+        const endpoint = pageviewsByDayForArticle({
+            startDay: 1,
+            endDay: 30,
             month: 1,
             year: 2023,
+            article: 'TEST',
         });
-        expect(endpoint).toContain(ENDPOINT_SEGMENT.pageviewsByDayPerCountry);
+        expect(endpoint).toContain(ENDPOINT_SEGMENT.pageviewsByDayForArticle);
     });
 });

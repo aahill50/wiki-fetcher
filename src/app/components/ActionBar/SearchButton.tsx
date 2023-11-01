@@ -1,17 +1,15 @@
 'use client';
 
 import { useCallback } from 'react';
-import clsx from 'clsx';
 import { useStore } from '~/store';
 import api from '~/api';
 import { formatArticles } from '~/utilities';
-import { averta } from '~/fonts/fonts';
+import classes from '../classes';
 
 export default function SearchButton() {
     const selectedDay = useStore((state) => state.selectedDay);
     const selectedMonth = useStore((state) => state.selectedMonth);
     const selectedYear = useStore((state) => state.selectedYear);
-    const country = useStore((state) => state.country);
     const numResults = useStore((state) => state.numResults);
     const setArticles = useStore((state) => state.setArticles);
     const setPage = useStore((state) => state.setPage);
@@ -21,13 +19,7 @@ export default function SearchButton() {
         const day = selectedDay;
         const month = selectedMonth;
         const year = selectedYear;
-        const res = await api.getPageviewsByDayPerCountry({
-            access: 'all-access',
-            country,
-            day,
-            month,
-            year,
-        });
+        const res = await api.pageviewsByDay({ day, month, year });
         const articles = res.items[0].articles || [];
         setArticles(formatArticles(articles, numResults, { day, month, year }));
         setPage(1);
@@ -36,7 +28,6 @@ export default function SearchButton() {
         selectedDay,
         selectedMonth,
         selectedYear,
-        country,
         numResults,
         setArticles,
         setPage,
@@ -45,25 +36,7 @@ export default function SearchButton() {
 
     return (
         <button
-            className={clsx(
-                'sm:font-poppins',
-                'bg-brandGreen-500',
-                'text-base',
-                'sm:max-md:text-sm',
-                'py-3',
-                'sm:py-5',
-                'sm:ml-5',
-                'grow-0',
-                'min-w-[160px]',
-                'sm:max-md:min-w-[100px]',
-                'rounded-full',
-                'text-white',
-                'font-semibold',
-                'sm:font-medium',
-                'tracking-wide',
-                'cursor-pointer',
-                averta.className
-            )}
+            className={classes.searchButton}
             onClick={() => void onClickSearch()}
         >
             Search

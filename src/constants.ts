@@ -6,7 +6,7 @@ export const PAGE_ENDPOINT_ROOT = 'https://en.wikipedia.org/api/rest_v1/page';
 
 export const ENDPOINT_SEGMENT = {
     pageviewsByDay: 'top',
-    pageviewsByDayPerCountry: 'top-per-country',
+    pageviewsByDayForArticle: 'per-article',
     summary: 'summary',
 } as const;
 
@@ -33,7 +33,6 @@ export const NUM_PAGES_TO_DISPLAY = 4;
 export const MENUS = {
     DATE_PICKER: 'DATE_PICKER',
     NUM_RESULTS: 'NUM_RESULTS',
-    COUNTRY: 'COUNTRY',
 } as const;
 
 export type MENU_KEY = keyof typeof MENUS;
@@ -63,50 +62,4 @@ export const MONTHS = {
     12: 'December',
 } as Record<number, string>;
 
-// https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements
-// Filtered to remove any countries with < 25 results yesterday (as of 10/31/23)
-export const COUNTRY_CODES = {
-    ES: 'Spain',
-    FI: 'Finland',
-    FR: 'France',
-    GB: 'United Kingdom of Great Britain and Northern Ireland',
-    GR: 'Greece',
-    HK: 'Hong Kong',
-    HU: 'Hungary',
-    ID: 'Indonesia',
-    IE: 'Ireland',
-    IL: 'Israel',
-    IN: 'India',
-    IT: 'Italy',
-    JP: 'Japan',
-    KR: 'Korea, Republic of',
-    MA: 'Morocco',
-    MX: 'Mexico',
-    MY: 'Malaysia',
-    NG: 'Nigeria',
-    NL: 'Netherlands, Kingdom of the',
-    NO: 'Norway',
-    PE: 'Peru',
-    PH: 'Philippines',
-    PL: 'Poland',
-    RO: 'Romania',
-    SE: 'Sweden',
-    SG: 'Singapore',
-    TW: 'Taiwan, Province of China',
-    UA: 'Ukraine',
-    US: 'United States of America',
-    ZA: 'South Africa',
-    AR: 'Argentina',
-    AT: 'Austria',
-    AU: 'Australia',
-    BE: 'Belgium',
-    BR: 'Brazil',
-    CA: 'Canada',
-    CL: 'Chile',
-    CO: 'Colombia',
-    CZ: 'Czechia',
-    DE: 'Germany',
-    DZ: 'Algeria',
-} as const;
-
-export type COUNTRY_CODE = keyof typeof COUNTRY_CODES;
+export const MONTHS_WITH_30_DAYS = [4, 6, 9, 11];

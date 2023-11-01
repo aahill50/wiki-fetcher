@@ -18,6 +18,9 @@ const config: Config = {
                 ivy: {
                     300: '#B3CEC9',
                 },
+                marigold: {
+                    500: '#E68A00',
+                },
                 neutral: {
                     400: '#D4D8D9',
                     500: '#A7AAAB',

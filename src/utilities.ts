@@ -1,4 +1,4 @@
-import { NUM_PAGES_TO_DISPLAY } from './constants';
+import { MONTHS_WITH_30_DAYS, NUM_PAGES_TO_DISPLAY } from './constants';
 import { type Article } from './types';
 
 const articlesToExclude: Record<string, boolean> = {
@@ -9,16 +9,19 @@ const articlesToExclude: Record<string, boolean> = {
 const articlesFilterFn = (article: Omit<Article, 'key'>): boolean => {
     const articleName = article.article;
     const isExcluded = !!articlesToExclude[articleName];
-    const isSpecialArticle = articleName.slice(0, 8) === 'Special:';
-    const isWikipediaArticle = articleName.slice(0, 10) === 'Wikipedia:';
-    const isWikidataArticle = articleName.slice(0, 10) === 'Wikidata:';
-    const isCommonsArticle = articleName.slice(0, 10) === 'Commons:';
+    const isSpecialArticle = articleName.startsWith('Special:');
+    const isWikipediaArticle = articleName.startsWith('Wikipedia:');
+    const isWikidataArticle = articleName.startsWith('Wikidata:');
+    const isCommonsArticle = articleName.startsWith('Commons:');
+    const isFile = articleName.startsWith('File:');
+
     return !(
         isExcluded ||
         isSpecialArticle ||
         isWikipediaArticle ||
         isWikidataArticle ||
-        isCommonsArticle
+        isCommonsArticle ||
+        isFile
     );
 };
 
@@ -140,4 +143,23 @@ export const getDisplayPageNumbers = ({
     }
 
     return displayPageNumbers;
+};
+
+export const isLeapYear = (year: number): boolean => {
+    const isDivisibleBy4 = year % 4 === 0;
+    const isDivisibleBy100 = year % 100 === 0;
+    const isDivisibleBy400 = year % 400 === 0;
+
+    return (
+        (isDivisibleBy4 && !isDivisibleBy100) ||
+        (isDivisibleBy4 && isDivisibleBy400)
+    );
+};
+
+export const getLastDayOfMonth = (month: number, year: number): number => {
+    if (month === 2) {
+        return isLeapYear(year) ? 29 : 28;
+    }
+
+    return MONTHS_WITH_30_DAYS[month] ? 30 : 31;
 };

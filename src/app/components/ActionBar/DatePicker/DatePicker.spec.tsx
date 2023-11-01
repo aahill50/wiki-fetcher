@@ -11,7 +11,9 @@ describe('DatePicker', () => {
 
     it('should render the dropdown menu label', () => {
         render(<DatePicker />);
-        expect(screen.getByText('DATE')).toBeInTheDocument();
+        expect(
+            screen.getByText('DATE', { selector: '.visible' })
+        ).toBeInTheDocument();
     });
 
     it('should display the current selected date', () => {

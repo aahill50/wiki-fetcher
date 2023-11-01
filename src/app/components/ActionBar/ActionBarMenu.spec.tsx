@@ -11,6 +11,7 @@ describe('ActionBarMenu', () => {
                 icon={'TEST_ICON'}
                 isOpen={false}
                 label='TEST_LABEL'
+                smallLabel='SMALL_TEST_LABEL'
                 onClick={clickMock}
             >
                 <div>TEST CHILD</div>
