@@ -162,8 +162,10 @@ const api = {
             fetch(articleSummaryEndpoint),
             fetch(articleDetailsEndpoint),
         ]);
-        const summaryJson: SummaryResponseJson = await summary.json();
-        const detailsJson: DetailsResponseJson = await details.json();
+        const [summaryJson, detailsJson]: [
+            SummaryResponseJson,
+            DetailsResponseJson
+        ] = await Promise.all([summary.json(), details.json()]);
         const views = detailsJson?.items?.map((item) => {
             const timestamp = item?.timestamp;
             const year = timestamp.slice(0, 4);
@@ -176,6 +178,9 @@ const api = {
                 views: item?.views || 0,
             };
         });
+        console.log('articleDetailsEndpoint:', articleDetailsEndpoint);
+        console.log('opts:', opts);
+        console.log(views);
 
         const viewsCompareFn = (a: ArticleDailyView, b: ArticleDailyView) => {
             return b.views - a.views;

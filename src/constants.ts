@@ -62,4 +62,9 @@ export const MONTHS = {
     12: 'December',
 } as Record<number, string>;
 
-export const MONTHS_WITH_30_DAYS = [4, 6, 9, 11];
+export const MONTHS_WITH_30_DAYS: Record<number, boolean> = {
+    4: true,
+    6: true,
+    9: true,
+    11: true,
+};
