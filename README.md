@@ -111,7 +111,7 @@ Unit tests are written with Jest using React Testing Library for directly testin
 ## Built With
 
 -   [react](https://react.dev/reference/react)
--   [Next.js](https://nextjs.org/docs)'
+-   [Next.js](https://nextjs.org/docs)
 -   [Typescript](https://www.typescriptlang.org/docs/)
 -   [Tailwind CSS](https://tailwindcss.com/docs/)
 -   [zustand](https://github.com/pmndrs/zustand#readme) (State Management)
