@@ -178,9 +178,6 @@ const api = {
                 views: item?.views || 0,
             };
         });
-        console.log('articleDetailsEndpoint:', articleDetailsEndpoint);
-        console.log('opts:', opts);
-        console.log(views);
 
         const viewsCompareFn = (a: ArticleDailyView, b: ArticleDailyView) => {
             return b.views - a.views;
