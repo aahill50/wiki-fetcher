@@ -1,6 +1,6 @@
 # Wiki Fetcher
 
-This app allows a user to search for the most viewed wiki pages for a specific date. The user can select the day they wish to see reuslts for and decide how many results they wish to see. The articles are displayed by rank and show the number of times it was viewed that day.
+This app allows a user to search for the most viewed wiki pages for a specific date. The user can select the day they wish to see results for and decide how many results they wish to see. The articles are displayed by rank and show the number of times it was viewed that day.
 
 Additionally, the user can pin articles, which remain visible at the top of each page and persist through reloads. The user can also click on an article to see a brief summary of the wiki article along with the top 3 most viewed days that month for the article.
 
