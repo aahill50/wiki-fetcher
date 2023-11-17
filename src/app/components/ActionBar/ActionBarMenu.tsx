@@ -40,7 +40,7 @@ export default function ActionBarMenu(props: Props) {
     );
 
     return (
-        <div className='grow flex relative mb-6 sm:mb-0 sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer transition-all'>
+        <div className='flex grow relative mb-6 sm:mb-0 sm:hover:bg-neutral-100 sm:rounded-full sm:px-3 sm:py-4 cursor-pointer transition-all'>
             {icon}
             <div className='flex flex-col ml-6' onClick={onClick}>
                 <div className='flex items-center font-poppins font-medium text-neutral-400 text-xs tracking-wider cursor-pointer'>

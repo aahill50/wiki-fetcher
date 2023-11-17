@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useStore } from '~/store';
 import api from '~/api';
 import { getArticlesForPage } from '~/utilities';
-import Article from '../Article';
+import Article from './Article';
 import classes from '../classes';
 import { type SummaryResponse } from '~/api';
 import { type Article as Type_Article } from '~/types';

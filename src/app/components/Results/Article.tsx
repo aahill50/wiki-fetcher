@@ -1,11 +1,11 @@
-import classes from './classes';
-import Icon from './Icon';
+import classes from '../classes';
+import Icon from '../Icon';
 import ArticleDetails from './ArticleDetails';
 import { prettyNumbers } from '~/utilities';
 import iconPinEmpty from '~/assets/icon_pin_empty.svg';
 import iconPinFilled from '~/assets/icon_pin_filled.svg';
-import { type Article } from '~/types';
 import { type StaticImport } from 'next/dist/shared/lib/get-img-props';
+import { type Article } from '~/types';
 import { type SummaryResponse } from '~/api';
 
 interface Props {
